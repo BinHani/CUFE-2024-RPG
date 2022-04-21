@@ -118,12 +118,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\vs libraries\SDL2_image-2.0.5\include;C:\vs libraries\SDL2-2.0.20\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Omar\source\repos\C++ RPG\C++ RPG\Frameworks;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vs libraries\SDL2_image-2.0.5\lib\x64;C:\vs libraries\SDL2-2.0.20\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Omar\source\repos\C++ RPG\C++ RPG;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -419,6 +419,11 @@
     <Image Include="assets\Tiles\Map_tile_97.png" />
     <Image Include="assets\Tiles\Map_tile_98.png" />
     <Image Include="assets\Tiles\Map_tile_99.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SDL2.lib" />
+    <Library Include="SDL2main.lib" />
+    <Library Include="SDL2test.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

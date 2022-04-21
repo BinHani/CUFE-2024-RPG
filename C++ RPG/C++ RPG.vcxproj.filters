@@ -818,4 +818,9 @@
       <Filter>assets\characters</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="SDL2main.lib" />
+    <Library Include="SDL2test.lib" />
+    <Library Include="SDL2.lib" />
+  </ItemGroup>
 </Project>
