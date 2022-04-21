@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{92ef59ec-045b-4866-87ea-9124d4e1b30d}</ProjectGuid>
+    <RootNamespace>CRPG</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\vs libraries\SDL2_image-2.0.5\include;C:\vs libraries\SDL2-2.0.20\include;C:\Program Files\Windows Kits\10\Include\10.0.22000.0\ucrt;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vs libraries\SDL2_image-2.0.5\lib\x64;C:\vs libraries\SDL2-2.0.20\lib\x64;C:\Program Files\Windows Kits\10\Lib\10.0.22000.0\um\x64;C:\Program Files\Windows Kits\10\Lib\10.0.22000.0\ucrt\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\vs libraries\SDL2_image-2.0.5\include;C:\vs libraries\SDL2-2.0.20\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\vs libraries\SDL2_image-2.0.5\lib\x64;C:\vs libraries\SDL2-2.0.20\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Frameworks\begin_code.h" />
+    <ClInclude Include="Frameworks\close_code.h" />
+    <ClInclude Include="Frameworks\SDL.h" />
+    <ClInclude Include="Frameworks\SDL_assert.h" />
+    <ClInclude Include="Frameworks\SDL_atomic.h" />
+    <ClInclude Include="Frameworks\SDL_audio.h" />
+    <ClInclude Include="Frameworks\SDL_bits.h" />
+    <ClInclude Include="Frameworks\SDL_blendmode.h" />
+    <ClInclude Include="Frameworks\SDL_clipboard.h" />
+    <ClInclude Include="Frameworks\SDL_config.h" />
+    <ClInclude Include="Frameworks\SDL_config_android.h" />
+    <ClInclude Include="Frameworks\SDL_config_iphoneos.h" />
+    <ClInclude Include="Frameworks\SDL_config_macosx.h" />
+    <ClInclude Include="Frameworks\SDL_config_minimal.h" />
+    <ClInclude Include="Frameworks\SDL_config_pandora.h" />
+    <ClInclude Include="Frameworks\SDL_config_psp.h" />
+    <ClInclude Include="Frameworks\SDL_config_windows.h" />
+    <ClInclude Include="Frameworks\SDL_config_winrt.h" />
+    <ClInclude Include="Frameworks\SDL_config_wiz.h" />
+    <ClInclude Include="Frameworks\SDL_copying.h" />
+    <ClInclude Include="Frameworks\SDL_cpuinfo.h" />
+    <ClInclude Include="Frameworks\SDL_egl.h" />
+    <ClInclude Include="Frameworks\SDL_endian.h" />
+    <ClInclude Include="Frameworks\SDL_error.h" />
+    <ClInclude Include="Frameworks\SDL_events.h" />
+    <ClInclude Include="Frameworks\SDL_filesystem.h" />
+    <ClInclude Include="Frameworks\SDL_gamecontroller.h" />
+    <ClInclude Include="Frameworks\SDL_gesture.h" />
+    <ClInclude Include="Frameworks\SDL_haptic.h" />
+    <ClInclude Include="Frameworks\SDL_hidapi.h" />
+    <ClInclude Include="Frameworks\SDL_hints.h" />
+    <ClInclude Include="Frameworks\SDL_image.h" />
+    <ClInclude Include="Frameworks\SDL_joystick.h" />
+    <ClInclude Include="Frameworks\SDL_keyboard.h" />
+    <ClInclude Include="Frameworks\SDL_keycode.h" />
+    <ClInclude Include="Frameworks\SDL_loadso.h" />
+    <ClInclude Include="Frameworks\SDL_locale.h" />
+    <ClInclude Include="Frameworks\SDL_log.h" />
+    <ClInclude Include="Frameworks\SDL_main.h" />
+    <ClInclude Include="Frameworks\SDL_messagebox.h" />
+    <ClInclude Include="Frameworks\SDL_metal.h" />
+    <ClInclude Include="Frameworks\SDL_misc.h" />
+    <ClInclude Include="Frameworks\SDL_mouse.h" />
+    <ClInclude Include="Frameworks\SDL_mutex.h" />
+    <ClInclude Include="Frameworks\SDL_name.h" />
+    <ClInclude Include="Frameworks\SDL_opengl.h" />
+    <ClInclude Include="Frameworks\SDL_opengles.h" />
+    <ClInclude Include="Frameworks\SDL_opengles2.h" />
+    <ClInclude Include="Frameworks\SDL_opengles2_gl2.h" />
+    <ClInclude Include="Frameworks\SDL_opengles2_gl2ext.h" />
+    <ClInclude Include="Frameworks\SDL_opengles2_gl2platform.h" />
+    <ClInclude Include="Frameworks\SDL_opengles2_khrplatform.h" />
+    <ClInclude Include="Frameworks\SDL_opengl_glext.h" />
+    <ClInclude Include="Frameworks\SDL_pixels.h" />
+    <ClInclude Include="Frameworks\SDL_platform.h" />
+    <ClInclude Include="Frameworks\SDL_power.h" />
+    <ClInclude Include="Frameworks\SDL_quit.h" />
+    <ClInclude Include="Frameworks\SDL_rect.h" />
+    <ClInclude Include="Frameworks\SDL_render.h" />
+    <ClInclude Include="Frameworks\SDL_revision.h" />
+    <ClInclude Include="Frameworks\SDL_rwops.h" />
+    <ClInclude Include="Frameworks\SDL_scancode.h" />
+    <ClInclude Include="Frameworks\SDL_sensor.h" />
+    <ClInclude Include="Frameworks\SDL_shape.h" />
+    <ClInclude Include="Frameworks\SDL_stdinc.h" />
+    <ClInclude Include="Frameworks\SDL_surface.h" />
+    <ClInclude Include="Frameworks\SDL_system.h" />
+    <ClInclude Include="Frameworks\SDL_syswm.h" />
+    <ClInclude Include="Frameworks\SDL_test.h" />
+    <ClInclude Include="Frameworks\SDL_test_assert.h" />
+    <ClInclude Include="Frameworks\SDL_test_common.h" />
+    <ClInclude Include="Frameworks\SDL_test_compare.h" />
+    <ClInclude Include="Frameworks\SDL_test_crc32.h" />
+    <ClInclude Include="Frameworks\SDL_test_font.h" />
+    <ClInclude Include="Frameworks\SDL_test_fuzzer.h" />
+    <ClInclude Include="Frameworks\SDL_test_harness.h" />
+    <ClInclude Include="Frameworks\SDL_test_images.h" />
+    <ClInclude Include="Frameworks\SDL_test_log.h" />
+    <ClInclude Include="Frameworks\SDL_test_md5.h" />
+    <ClInclude Include="Frameworks\SDL_test_memory.h" />
+    <ClInclude Include="Frameworks\SDL_test_random.h" />
+    <ClInclude Include="Frameworks\SDL_thread.h" />
+    <ClInclude Include="Frameworks\SDL_timer.h" />
+    <ClInclude Include="Frameworks\SDL_touch.h" />
+    <ClInclude Include="Frameworks\SDL_types.h" />
+    <ClInclude Include="Frameworks\SDL_version.h" />
+    <ClInclude Include="Frameworks\SDL_video.h" />
+    <ClInclude Include="Frameworks\SDL_vulkan.h" />
+    <ClInclude Include="GameEngine\Collision.h" />
+    <ClInclude Include="GameEngine\ECS\ColliderComponent.h" />
+    <ClInclude Include="GameEngine\ECS\Components.h" />
+    <ClInclude Include="GameEngine\ECS\ECS.h" />
+    <ClInclude Include="GameEngine\ECS\KeyboardController.h" />
+    <ClInclude Include="GameEngine\ECS\SpriteComponent.h" />
+    <ClInclude Include="GameEngine\ECS\TileComponent.h" />
+    <ClInclude Include="GameEngine\ECS\TransformComponent.h" />
+    <ClInclude Include="GameEngine\Game.h" />
+    <ClInclude Include="GameEngine\GameObject.h" />
+    <ClInclude Include="GameEngine\Map.h" />
+    <ClInclude Include="GameEngine\TextureManager.h" />
+    <ClInclude Include="GameEngine\Vector2D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\maps\testMap.map" />
+    <None Include="Frameworks\SDL_config.h.cmake" />
+    <None Include="Frameworks\SDL_config.h.in" />
+    <None Include="Frameworks\SDL_config_macosx.h.orig" />
+    <None Include="libjpeg-9.dll" />
+    <None Include="libpng16-16.dll" />
+    <None Include="libtiff-5.dll" />
+    <None Include="libwebp-7.dll" />
+    <None Include="SDL2.dll" />
+    <None Include="SDL2_image.dll" />
+    <None Include="zlib1.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameEngine\Collision.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="GameEngine\ECS\ECS.cpp" />
+    <ClCompile Include="GameEngine\Game.cpp" />
+    <ClCompile Include="GameEngine\GameObject.cpp" />
+    <ClCompile Include="GameEngine\main.cpp" />
+    <ClCompile Include="GameEngine\Map.cpp" />
+    <ClCompile Include="GameEngine\TextureManager.cpp" />
+    <ClCompile Include="GameEngine\Vector2D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Characters\cleric_spritesheet.png" />
+    <Image Include="assets\Characters\ranger_spritesheet.png" />
+    <Image Include="assets\Characters\warrior_spritesheet.png" />
+    <Image Include="assets\Characters\wizard_spritesheet.png" />
+    <Image Include="assets\Tiles\Map_tile_01.png" />
+    <Image Include="assets\Tiles\Map_tile_02.png" />
+    <Image Include="assets\Tiles\Map_tile_03.png" />
+    <Image Include="assets\Tiles\Map_tile_04.png" />
+    <Image Include="assets\Tiles\Map_tile_05.png" />
+    <Image Include="assets\Tiles\Map_tile_06.png" />
+    <Image Include="assets\Tiles\Map_tile_07.png" />
+    <Image Include="assets\Tiles\Map_tile_08.png" />
+    <Image Include="assets\Tiles\Map_tile_09.png" />
+    <Image Include="assets\Tiles\Map_tile_10.png" />
+    <Image Include="assets\Tiles\Map_tile_100.png" />
+    <Image Include="assets\Tiles\Map_tile_101.png" />
+    <Image Include="assets\Tiles\Map_tile_102.png" />
+    <Image Include="assets\Tiles\Map_tile_103.png" />
+    <Image Include="assets\Tiles\Map_tile_104.png" />
+    <Image Include="assets\Tiles\Map_tile_105.png" />
+    <Image Include="assets\Tiles\Map_tile_106.png" />
+    <Image Include="assets\Tiles\Map_tile_107.png" />
+    <Image Include="assets\Tiles\Map_tile_108.png" />
+    <Image Include="assets\Tiles\Map_tile_109.png" />
+    <Image Include="assets\Tiles\Map_tile_11.png" />
+    <Image Include="assets\Tiles\Map_tile_110.png" />
+    <Image Include="assets\Tiles\Map_tile_111.png" />
+    <Image Include="assets\Tiles\Map_tile_112.png" />
+    <Image Include="assets\Tiles\Map_tile_113.png" />
+    <Image Include="assets\Tiles\Map_tile_114.png" />
+    <Image Include="assets\Tiles\Map_tile_115.png" />
+    <Image Include="assets\Tiles\Map_tile_116.png" />
+    <Image Include="assets\Tiles\Map_tile_117.png" />
+    <Image Include="assets\Tiles\Map_tile_118.png" />
+    <Image Include="assets\Tiles\Map_tile_119.png" />
+    <Image Include="assets\Tiles\Map_tile_12.png" />
+    <Image Include="assets\Tiles\Map_tile_120.png" />
+    <Image Include="assets\Tiles\Map_tile_121.png" />
+    <Image Include="assets\Tiles\Map_tile_122.png" />
+    <Image Include="assets\Tiles\Map_tile_123.png" />
+    <Image Include="assets\Tiles\Map_tile_124.png" />
+    <Image Include="assets\Tiles\Map_tile_125.png" />
+    <Image Include="assets\Tiles\Map_tile_126.png" />
+    <Image Include="assets\Tiles\Map_tile_127.png" />
+    <Image Include="assets\Tiles\Map_tile_128.png" />
+    <Image Include="assets\Tiles\Map_tile_129.png" />
+    <Image Include="assets\Tiles\Map_tile_13.png" />
+    <Image Include="assets\Tiles\Map_tile_130.png" />
+    <Image Include="assets\Tiles\Map_tile_131.png" />
+    <Image Include="assets\Tiles\Map_tile_132.png" />
+    <Image Include="assets\Tiles\Map_tile_133.png" />
+    <Image Include="assets\Tiles\Map_tile_134.png" />
+    <Image Include="assets\Tiles\Map_tile_135.png" />
+    <Image Include="assets\Tiles\Map_tile_136.png" />
+    <Image Include="assets\Tiles\Map_tile_137.png" />
+    <Image Include="assets\Tiles\Map_tile_138.png" />
+    <Image Include="assets\Tiles\Map_tile_139.png" />
+    <Image Include="assets\Tiles\Map_tile_14.png" />
+    <Image Include="assets\Tiles\Map_tile_140.png" />
+    <Image Include="assets\Tiles\Map_tile_141.png" />
+    <Image Include="assets\Tiles\Map_tile_142.png" />
+    <Image Include="assets\Tiles\Map_tile_143.png" />
+    <Image Include="assets\Tiles\Map_tile_15.png" />
+    <Image Include="assets\Tiles\Map_tile_16.png" />
+    <Image Include="assets\Tiles\Map_tile_17.png" />
+    <Image Include="assets\Tiles\Map_tile_18.png" />
+    <Image Include="assets\Tiles\Map_tile_19.png" />
+    <Image Include="assets\Tiles\Map_tile_20.png" />
+    <Image Include="assets\Tiles\Map_tile_21.png" />
+    <Image Include="assets\Tiles\Map_tile_22.png" />
+    <Image Include="assets\Tiles\Map_tile_23.png" />
+    <Image Include="assets\Tiles\Map_tile_24.png" />
+    <Image Include="assets\Tiles\Map_tile_25.png" />
+    <Image Include="assets\Tiles\Map_tile_26.png" />
+    <Image Include="assets\Tiles\Map_tile_27.png" />
+    <Image Include="assets\Tiles\Map_tile_28.png" />
+    <Image Include="assets\Tiles\Map_tile_29.png" />
+    <Image Include="assets\Tiles\Map_tile_30.png" />
+    <Image Include="assets\Tiles\Map_tile_31.png" />
+    <Image Include="assets\Tiles\Map_tile_32.png" />
+    <Image Include="assets\Tiles\Map_tile_33.png" />
+    <Image Include="assets\Tiles\Map_tile_34.png" />
+    <Image Include="assets\Tiles\Map_tile_35.png" />
+    <Image Include="assets\Tiles\Map_tile_36.png" />
+    <Image Include="assets\Tiles\Map_tile_37.png" />
+    <Image Include="assets\Tiles\Map_tile_38.png" />
+    <Image Include="assets\Tiles\Map_tile_39.png" />
+    <Image Include="assets\Tiles\Map_tile_40.png" />
+    <Image Include="assets\Tiles\Map_tile_41.png" />
+    <Image Include="assets\Tiles\Map_tile_42.png" />
+    <Image Include="assets\Tiles\Map_tile_43.png" />
+    <Image Include="assets\Tiles\Map_tile_44.png" />
+    <Image Include="assets\Tiles\Map_tile_45.png" />
+    <Image Include="assets\Tiles\Map_tile_46.png" />
+    <Image Include="assets\Tiles\Map_tile_47.png" />
+    <Image Include="assets\Tiles\Map_tile_48.png" />
+    <Image Include="assets\Tiles\Map_tile_49.png" />
+    <Image Include="assets\Tiles\Map_tile_50.png" />
+    <Image Include="assets\Tiles\Map_tile_51.png" />
+    <Image Include="assets\Tiles\Map_tile_52.png" />
+    <Image Include="assets\Tiles\Map_tile_53.png" />
+    <Image Include="assets\Tiles\Map_tile_54.png" />
+    <Image Include="assets\Tiles\Map_tile_55.png" />
+    <Image Include="assets\Tiles\Map_tile_56.png" />
+    <Image Include="assets\Tiles\Map_tile_57.png" />
+    <Image Include="assets\Tiles\Map_tile_58.png" />
+    <Image Include="assets\Tiles\Map_tile_59.png" />
+    <Image Include="assets\Tiles\Map_tile_60.png" />
+    <Image Include="assets\Tiles\Map_tile_61.png" />
+    <Image Include="assets\Tiles\Map_tile_62.png" />
+    <Image Include="assets\Tiles\Map_tile_63.png" />
+    <Image Include="assets\Tiles\Map_tile_64.png" />
+    <Image Include="assets\Tiles\Map_tile_65.png" />
+    <Image Include="assets\Tiles\Map_tile_66.png" />
+    <Image Include="assets\Tiles\Map_tile_67.png" />
+    <Image Include="assets\Tiles\Map_tile_68.png" />
+    <Image Include="assets\Tiles\Map_tile_69.png" />
+    <Image Include="assets\Tiles\Map_tile_70.png" />
+    <Image Include="assets\Tiles\Map_tile_71.png" />
+    <Image Include="assets\Tiles\Map_tile_72.png" />
+    <Image Include="assets\Tiles\Map_tile_73.png" />
+    <Image Include="assets\Tiles\Map_tile_74.png" />
+    <Image Include="assets\Tiles\Map_tile_75.png" />
+    <Image Include="assets\Tiles\Map_tile_76.png" />
+    <Image Include="assets\Tiles\Map_tile_77.png" />
+    <Image Include="assets\Tiles\Map_tile_78.png" />
+    <Image Include="assets\Tiles\Map_tile_79.png" />
+    <Image Include="assets\Tiles\Map_tile_80.png" />
+    <Image Include="assets\Tiles\Map_tile_81.png" />
+    <Image Include="assets\Tiles\Map_tile_82.png" />
+    <Image Include="assets\Tiles\Map_tile_83.png" />
+    <Image Include="assets\Tiles\Map_tile_84.png" />
+    <Image Include="assets\Tiles\Map_tile_85.png" />
+    <Image Include="assets\Tiles\Map_tile_86.png" />
+    <Image Include="assets\Tiles\Map_tile_87.png" />
+    <Image Include="assets\Tiles\Map_tile_88.png" />
+    <Image Include="assets\Tiles\Map_tile_89.png" />
+    <Image Include="assets\Tiles\Map_tile_90.png" />
+    <Image Include="assets\Tiles\Map_tile_91.png" />
+    <Image Include="assets\Tiles\Map_tile_92.png" />
+    <Image Include="assets\Tiles\Map_tile_93.png" />
+    <Image Include="assets\Tiles\Map_tile_94.png" />
+    <Image Include="assets\Tiles\Map_tile_95.png" />
+    <Image Include="assets\Tiles\Map_tile_96.png" />
+    <Image Include="assets\Tiles\Map_tile_97.png" />
+    <Image Include="assets\Tiles\Map_tile_98.png" />
+    <Image Include="assets\Tiles\Map_tile_99.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
