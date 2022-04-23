@@ -13,7 +13,7 @@ class character
 public:
 	string name;                      
 	string type;
-	uint16_t  HP;
+	short  HP;
 	uint16_t  FP;
 	uint16_t  DAMAGE;
 	uint16_t  RESISTANCE;
