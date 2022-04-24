@@ -1,7 +1,10 @@
 #pragma once
 #include "Components.h"
 #include "SDL.h"
-#include "../TextureManager.h"
+#include "..\TextureManager.h"
+#include "Animation.h"
+#include "..\AssetManager.h"
+#include <map>
 
 class SpriteComponent : public Component {
 
@@ -11,14 +14,44 @@ private:
 	SDL_Texture* texture;
 	SDL_Rect srcRect, destRect;
 
+	bool animated = false;
+	int frames = 0;
+	int speed = 50;
+
 public:
 
+	int animIndex = 0;
+
+	std::map<const char*, Animation> animations;
+
+	SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
+
 	SpriteComponent() = default;
-	SpriteComponent(const char* path) { setTex(path); }
 
-	~SpriteComponent() { SDL_DestroyTexture(texture); }
+	SpriteComponent(std::string id) {setTex(id); }
 
-	void setTex(const char* path) { texture = TextureManager::LoadTexture(path); }
+	SpriteComponent(std::string id, bool isAnimated) { 
+		
+		animated = isAnimated;
+
+		Animation idle = Animation(0, 1, 100);
+		Animation walkDown = Animation(0, 4, 100);
+		Animation walkLeft = Animation(1, 3, 100);
+		Animation walkUp = Animation(2, 3, 100);
+
+		animations.emplace("Idle", idle);
+		animations.emplace("WalkDown", walkDown);
+		animations.emplace("WalkLeft", walkLeft);
+		animations.emplace("WalkUp", walkUp);
+
+		Play("Idle");
+
+		setTex(id);
+	}
+
+	~SpriteComponent() {}
+
+	void setTex(std::string id) { texture = Game::assets->GetTexture(id); }
 
 	void init() override {
 
@@ -31,12 +64,24 @@ public:
 
 	void update() override {
 
-		destRect.x = static_cast<int>(transform->position.x);
-		destRect.y = static_cast<int>(transform->position.y);
+		//Go to current frame in animation
+		if (animated) { srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames); srcRect.y = 32 * 5; }
+
+		srcRect.y = animIndex * transform->height;
+
+		destRect.x = static_cast<int>(transform->position.x) - Game::camera.x;
+		destRect.y = static_cast<int>(transform->position.y) - Game::camera.y;
 		destRect.w = transform->width * transform->scale;
 		destRect.h = transform->height * transform->scale;
 	}
 
-	void draw() override { TextureManager::Draw(texture, srcRect, destRect); }
+	void draw() override { TextureManager::Draw(texture, srcRect, destRect, spriteFlip); }
+
+	void Play(const char* animName) {
+
+		frames = animations[animName].frames;
+		animIndex = animations[animName].index;
+		speed = animations[animName].speed;
+	}
 
 };

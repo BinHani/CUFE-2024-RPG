@@ -5,6 +5,7 @@
 #include <vector>
 
 class ColliderComponent;
+class AssetManager;
 
 class Game {
 	
@@ -20,13 +21,21 @@ public:
 	void render();
 	void clean();
 
-	static void AddTile(int id, int x, int y);
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
-	static std::vector<ColliderComponent*> colliders;
+	static bool isRunning;
+	static SDL_Rect camera;
+	static AssetManager* assets;
+
+	enum groupLabels : std::size_t {
+
+		groupMap,
+		groupPlayerCharacters,
+		groupColliders,
+		groupProjectiles
+	};
 
 private:
 	int cnt = 0;
-	bool isRunning = false;
 	SDL_Window* window;
 };

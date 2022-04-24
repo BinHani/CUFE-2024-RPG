@@ -1,54 +1,38 @@
 #pragma once
 #include "ECS.h"
-#include "SpriteComponent.h"
-#include "TransformComponent.h"
 #include "SDL.h"
 
 class TileComponent : public Component {
 
 public:
-	TransformComponent* transform;
-	SpriteComponent* sprite;
 
-	SDL_Rect tileRect;
-	int tileID;
-	const char* path;
+	SDL_Texture* texture;
+	SDL_Rect srcRect, destRect;
+	Vector2D position;
 
 	TileComponent() = default;
 
-	TileComponent(int x, int y, int w, int h, int id) {
+	~TileComponent() { SDL_DestroyTexture(texture); }
 
-		tileRect.x = x;
-		tileRect.y = y;
-		tileRect.w = w;
-		tileRect.h = h;
-		tileID = id;
+	TileComponent(int srcX, int srcY, int xpos, int ypos, int tsize, int tscale, std::string id) {
 
-		switch (tileID) {
+		texture = Game::assets->GetTexture(id);
 
-		case 0: //water
-			path = "assets/tiles/Map_tile_01.png";
-			break;
+		position.x = static_cast<float>(xpos);
+		position.y = static_cast<float>(ypos);
 
-		case 1: //dirt
-			path = "assets/tiles/Map_tile_128.png";
-			break;
+		srcRect.x = srcX;
+		srcRect.y = srcY;
+		srcRect.w = srcRect.h = tsize;
 
-		case 2: //grass
-			path = "assets/tiles/Map_tile_17.png";
-			break;
-
-		default:
-			break;
-		}
+		destRect.w = destRect.h = tsize * tscale;
 	}
 
-	void init() override {
+	void update() override {
 
-		entity->addComponent<TransformComponent>((float)tileRect.x, (float)tileRect.y, tileRect.w, tileRect.h, 1);
-		transform = &entity->getComponent<TransformComponent>();
-
-		entity->addComponent<SpriteComponent>(path);
-		sprite = &entity->getComponent<SpriteComponent>();
+		destRect.x = static_cast<float>(position.x - Game::camera.x);
+		destRect.y = static_cast<float>(position.y - Game::camera.y);
 	}
+
+	void draw() override { TextureManager::Draw(texture, srcRect, destRect, SDL_FLIP_NONE); }
 };

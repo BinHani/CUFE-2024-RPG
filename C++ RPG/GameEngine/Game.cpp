@@ -1,37 +1,35 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "Map.h"
-#include "ECS/Components.h"
+#include "ECS\Components.h"
 #include "Vector2D.h"
 #include "Collision.h"
+#include "AssetManager.h"
+#include <sstream>
 
 Map* map;
 Manager manager;
 
-
 SDL_Renderer* Game::renderer = nullptr; 
 SDL_Event Game::event;
 
-std::vector<ColliderComponent*> Game::colliders;
+SDL_Rect Game::camera = { 0,0,1280,720 };
+
+AssetManager* Game::assets = new AssetManager(&manager);
+
+bool Game::isRunning = false;
 
 auto& Cleric(manager.addEntity());
-auto& wall(manager.addEntity());
+auto& Wizard(manager.addEntity());
+auto& Leader(manager.addEntity());
 
-enum groupLabels : std::size_t {
+auto& Flameball(manager.addEntity());
 
-	groupMap,
-	groupPlayers,
-	groupEnemies,
-	groupColliders
-};
+auto& label(manager.addEntity());
 
-Game::Game() {
+Game::Game() {}
 
-}
-
-Game::~Game() {
-
-}
+Game::~Game() {}
 
 //Window initializer
 void Game::init(const char* title, int width, int height, bool fullscreen) {
@@ -41,7 +39,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	if (fullscreen) flags = SDL_WINDOW_FULLSCREEN;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
-
+		
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -50,23 +48,35 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 		isRunning = true;
 	}
 
-	map = new Map();
+	if (TTF_Init() == -1) { std::cout << "Error: SDL_TTF" << std::endl; }
+
+	assets->AddTexture("Terrain", "assets/Map_tiles.png");
+	assets->AddTexture("Cleric", "assets/cleric_spritesheet.png");
+	assets->AddTexture("Wizard", "assets/wizard_spritesheet.png");
+	assets->AddTexture("Warrior", "assets/warrior_spritesheet.png");
+	assets->AddTexture("Flameball", "assets/flameball.png");
+	assets->AddFont("Pixellari", "assets/Pixellari.ttf", 16);
+
+	map = new Map("Terrain", 2, 16);
 
 	//ECS Implementation
 
-	Map::LoadMap("assets/maps/testMap.map", 16, 16);
+	map->LoadMap("assets/cave1.map", 50, 50);
 
-	Cleric.addComponent<TransformComponent>(2);
-	Cleric.addComponent<SpriteComponent>("assets/characters/cleric_spritesheet.png");
-	Cleric.addComponent<KeyboardController>();
-	Cleric.addComponent<ColliderComponent>("Cleric");
-	Cleric.addGroup(groupPlayers);
+	assets->CreatePlayerCharacter(Leader, Vector2D(550.0f, 600.0f), 184, 109, 0.25, true, "Warrior");
+	assets->CreatePlayerCharacter(Cleric, Vector2D(550.0f, 632.0f), 220, 110, 0.25, true, "Cleric");
+	assets->CreatePlayerCharacter(Wizard, Vector2D(550.0f, 664.0f), 222, 111, 0.25, true, "Wizard");
 
-	wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
-	wall.addComponent<SpriteComponent>("assets/tiles/Map_tile_08.png");
-	wall.addComponent<ColliderComponent>("wall");
-	wall.addGroup(groupMap);
+	SDL_Color white = { 0xFF,0xFF,0xFF,0xFF };
+	label.addComponent<UILabel>(10, 10, "Test String", "Pixellari", white);
+
+	assets->CreateProjectile(Flameball, Vector2D(600, 640), Vector2D(2,0), 300, 1, "Flameball");
 }
+
+auto& tiles(manager.getGroup(Game::groupMap));
+auto& players(manager.getGroup(Game::groupPlayerCharacters));
+auto& colliders(manager.getGroup(Game::groupColliders));
+auto& projectiles(manager.getGroup(Game::groupProjectiles));
 
 void Game::handleEvents() {
 	
@@ -83,17 +93,46 @@ void Game::handleEvents() {
 //Window Updater
 void Game::update() {
 
+	Vector2D clericPos = Cleric.getComponent<TransformComponent>().position;
+	Vector2D wizardPos = Wizard.getComponent<TransformComponent>().position;
+	Vector2D warriorPos = Leader.getComponent<TransformComponent>().position;
+
+	std::stringstream ss;
+	ss << "Player position: " << clericPos;
+	label.getComponent<UILabel>().SetLabelText(ss.str(), "Pixellari");
+
 	manager.refresh();
 	manager.update();
 
-	for (auto cc : colliders) {
-		Collision::AABB(Cleric.getComponent<ColliderComponent>(), *cc);
+	for (auto& c : colliders) {
+		
+		if (Collision::AABB(c->getComponent<ColliderComponent>().collider, Cleric.getComponent<ColliderComponent>().collider) ||
+			Collision::AABB (c->getComponent<ColliderComponent>().collider, Wizard.getComponent<ColliderComponent>().collider) ||
+			Collision::AABB(c->getComponent<ColliderComponent>().collider, Leader.getComponent<ColliderComponent>().collider)) {
+			
+			Cleric.getComponent<TransformComponent>().position = clericPos;
+			Wizard.getComponent<TransformComponent>().position = wizardPos;
+			Leader.getComponent<TransformComponent>().position = warriorPos;
+		}
 	}
-}
 
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& enemies(manager.getGroup(groupEnemies));
+	for (auto& p : projectiles) {
+
+		if (Collision::AABB(Cleric.getComponent<ColliderComponent>().collider, p->getComponent<ColliderComponent>().collider )) {
+			
+			std::cout << "hit Cleric" << std::endl;
+			p->destroy();
+		}
+	}
+
+	camera.x = Cleric.getComponent<TransformComponent>().position.x - 640;
+	camera.y = Cleric.getComponent<TransformComponent>().position.y - 360;
+
+	if (camera.x < 0) camera.x = 0;
+	if (camera.y < 0) camera.y = 0;
+	if (camera.x + camera.w > map->GetMapSize().x) camera.x = map->GetMapSize().x - camera.w;
+	if (camera.y + camera.h > map->GetMapSize().y) camera.y = map->GetMapSize().y - camera.h;
+}
 
 //Window renderer
 void Game::render() {
@@ -101,8 +140,10 @@ void Game::render() {
 	SDL_RenderClear(renderer);
 
 	for (auto& t : tiles) { t->draw(); }
+	for (auto& c : colliders) { c->draw(); }
 	for (auto& p : players) { p->draw(); }
-	for (auto& e : enemies) { e->draw(); }
+	for (auto& p : projectiles) { p->draw(); }
+	label.draw();
 
 	SDL_RenderPresent(renderer);
 }
@@ -113,11 +154,4 @@ void Game::clean() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
-}
-
-void Game::AddTile(int id, int x, int y) {
-
-	auto& tile(manager.addEntity());
-	tile.addComponent<TileComponent>(x, y, 32, 32, id);
-	tile.addGroup(groupMap);
 }

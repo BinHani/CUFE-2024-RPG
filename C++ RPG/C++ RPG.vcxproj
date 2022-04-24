@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\vs libraries\SDL2_image-2.0.5\include;C:\vs libraries\SDL2-2.0.20\include;C:\Program Files\Windows Kits\10\Include\10.0.22000.0\ucrt;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vs libraries\SDL2_image-2.0.5\lib\x64;C:\vs libraries\SDL2-2.0.20\lib\x64;C:\Program Files\Windows Kits\10\Lib\10.0.22000.0\um\x64;C:\Program Files\Windows Kits\10\Lib\10.0.22000.0\ucrt\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\C++ RPG\Frameworks;C:\Program Files\Windows Kits\10\Include\10.0.22000.0\ucrt;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\C++ RPG\;C:\Program Files\Windows Kits\10\Lib\10.0.22000.0\ucrt\x64;C:\Program Files\Windows Kits\10\Lib\10.0.22000.0\um\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -118,13 +118,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>${SolutionDir}\C++ RPG\Frameworks;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Frameworks;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>${SolutionDir}\C++ RPG;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>${SolutionDir};%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -228,26 +228,36 @@
     <ClInclude Include="Frameworks\SDL_thread.h" />
     <ClInclude Include="Frameworks\SDL_timer.h" />
     <ClInclude Include="Frameworks\SDL_touch.h" />
+    <ClInclude Include="Frameworks\SDL_ttf.h" />
     <ClInclude Include="Frameworks\SDL_types.h" />
     <ClInclude Include="Frameworks\SDL_version.h" />
     <ClInclude Include="Frameworks\SDL_video.h" />
     <ClInclude Include="Frameworks\SDL_vulkan.h" />
+    <ClInclude Include="GameEngine\AssetManager.h" />
     <ClInclude Include="GameEngine\Collision.h" />
+    <ClInclude Include="GameEngine\ECS\Animation.h" />
     <ClInclude Include="GameEngine\ECS\ColliderComponent.h" />
     <ClInclude Include="GameEngine\ECS\Components.h" />
     <ClInclude Include="GameEngine\ECS\ECS.h" />
     <ClInclude Include="GameEngine\ECS\KeyboardController.h" />
+    <ClInclude Include="GameEngine\ECS\ProjectileComponent.h" />
     <ClInclude Include="GameEngine\ECS\SpriteComponent.h" />
     <ClInclude Include="GameEngine\ECS\TileComponent.h" />
     <ClInclude Include="GameEngine\ECS\TransformComponent.h" />
+    <ClInclude Include="GameEngine\ECS\UILabel.h" />
     <ClInclude Include="GameEngine\Game.h" />
     <ClInclude Include="GameEngine\GameObject.h" />
+    <ClInclude Include="GameEngine\Grid.h" />
     <ClInclude Include="GameEngine\Map.h" />
+    <ClInclude Include="GameEngine\Pathfinding.h" />
     <ClInclude Include="GameEngine\TextureManager.h" />
+    <ClInclude Include="GameEngine\Tile.h" />
     <ClInclude Include="GameEngine\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\maps\testMap.map" />
+    <None Include="assets\Cave1.map" />
+    <None Include="assets\testMap.map" />
+    <None Include="assets\testMap2.map" />
     <None Include="Frameworks\SDL_config.h.cmake" />
     <None Include="Frameworks\SDL_config.h.in" />
     <None Include="Frameworks\SDL_config_macosx.h.orig" />
@@ -257,9 +267,11 @@
     <None Include="libwebp-7.dll" />
     <None Include="SDL2.dll" />
     <None Include="SDL2_image.dll" />
+    <None Include="SDL2_ttf.dll" />
     <None Include="zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameEngine\AssetManager.cpp" />
     <ClCompile Include="GameEngine\Collision.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -272,158 +284,22 @@
     <ClCompile Include="GameEngine\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\Characters\cleric_spritesheet.png" />
-    <Image Include="assets\Characters\ranger_spritesheet.png" />
-    <Image Include="assets\Characters\warrior_spritesheet.png" />
-    <Image Include="assets\Characters\wizard_spritesheet.png" />
-    <Image Include="assets\Tiles\Map_tile_01.png" />
-    <Image Include="assets\Tiles\Map_tile_02.png" />
-    <Image Include="assets\Tiles\Map_tile_03.png" />
-    <Image Include="assets\Tiles\Map_tile_04.png" />
-    <Image Include="assets\Tiles\Map_tile_05.png" />
-    <Image Include="assets\Tiles\Map_tile_06.png" />
-    <Image Include="assets\Tiles\Map_tile_07.png" />
-    <Image Include="assets\Tiles\Map_tile_08.png" />
-    <Image Include="assets\Tiles\Map_tile_09.png" />
-    <Image Include="assets\Tiles\Map_tile_10.png" />
-    <Image Include="assets\Tiles\Map_tile_100.png" />
-    <Image Include="assets\Tiles\Map_tile_101.png" />
-    <Image Include="assets\Tiles\Map_tile_102.png" />
-    <Image Include="assets\Tiles\Map_tile_103.png" />
-    <Image Include="assets\Tiles\Map_tile_104.png" />
-    <Image Include="assets\Tiles\Map_tile_105.png" />
-    <Image Include="assets\Tiles\Map_tile_106.png" />
-    <Image Include="assets\Tiles\Map_tile_107.png" />
-    <Image Include="assets\Tiles\Map_tile_108.png" />
-    <Image Include="assets\Tiles\Map_tile_109.png" />
-    <Image Include="assets\Tiles\Map_tile_11.png" />
-    <Image Include="assets\Tiles\Map_tile_110.png" />
-    <Image Include="assets\Tiles\Map_tile_111.png" />
-    <Image Include="assets\Tiles\Map_tile_112.png" />
-    <Image Include="assets\Tiles\Map_tile_113.png" />
-    <Image Include="assets\Tiles\Map_tile_114.png" />
-    <Image Include="assets\Tiles\Map_tile_115.png" />
-    <Image Include="assets\Tiles\Map_tile_116.png" />
-    <Image Include="assets\Tiles\Map_tile_117.png" />
-    <Image Include="assets\Tiles\Map_tile_118.png" />
-    <Image Include="assets\Tiles\Map_tile_119.png" />
-    <Image Include="assets\Tiles\Map_tile_12.png" />
-    <Image Include="assets\Tiles\Map_tile_120.png" />
-    <Image Include="assets\Tiles\Map_tile_121.png" />
-    <Image Include="assets\Tiles\Map_tile_122.png" />
-    <Image Include="assets\Tiles\Map_tile_123.png" />
-    <Image Include="assets\Tiles\Map_tile_124.png" />
-    <Image Include="assets\Tiles\Map_tile_125.png" />
-    <Image Include="assets\Tiles\Map_tile_126.png" />
-    <Image Include="assets\Tiles\Map_tile_127.png" />
-    <Image Include="assets\Tiles\Map_tile_128.png" />
-    <Image Include="assets\Tiles\Map_tile_129.png" />
-    <Image Include="assets\Tiles\Map_tile_13.png" />
-    <Image Include="assets\Tiles\Map_tile_130.png" />
-    <Image Include="assets\Tiles\Map_tile_131.png" />
-    <Image Include="assets\Tiles\Map_tile_132.png" />
-    <Image Include="assets\Tiles\Map_tile_133.png" />
-    <Image Include="assets\Tiles\Map_tile_134.png" />
-    <Image Include="assets\Tiles\Map_tile_135.png" />
-    <Image Include="assets\Tiles\Map_tile_136.png" />
-    <Image Include="assets\Tiles\Map_tile_137.png" />
-    <Image Include="assets\Tiles\Map_tile_138.png" />
-    <Image Include="assets\Tiles\Map_tile_139.png" />
-    <Image Include="assets\Tiles\Map_tile_14.png" />
-    <Image Include="assets\Tiles\Map_tile_140.png" />
-    <Image Include="assets\Tiles\Map_tile_141.png" />
-    <Image Include="assets\Tiles\Map_tile_142.png" />
-    <Image Include="assets\Tiles\Map_tile_143.png" />
-    <Image Include="assets\Tiles\Map_tile_15.png" />
-    <Image Include="assets\Tiles\Map_tile_16.png" />
-    <Image Include="assets\Tiles\Map_tile_17.png" />
-    <Image Include="assets\Tiles\Map_tile_18.png" />
-    <Image Include="assets\Tiles\Map_tile_19.png" />
-    <Image Include="assets\Tiles\Map_tile_20.png" />
-    <Image Include="assets\Tiles\Map_tile_21.png" />
-    <Image Include="assets\Tiles\Map_tile_22.png" />
-    <Image Include="assets\Tiles\Map_tile_23.png" />
-    <Image Include="assets\Tiles\Map_tile_24.png" />
-    <Image Include="assets\Tiles\Map_tile_25.png" />
-    <Image Include="assets\Tiles\Map_tile_26.png" />
-    <Image Include="assets\Tiles\Map_tile_27.png" />
-    <Image Include="assets\Tiles\Map_tile_28.png" />
-    <Image Include="assets\Tiles\Map_tile_29.png" />
-    <Image Include="assets\Tiles\Map_tile_30.png" />
-    <Image Include="assets\Tiles\Map_tile_31.png" />
-    <Image Include="assets\Tiles\Map_tile_32.png" />
-    <Image Include="assets\Tiles\Map_tile_33.png" />
-    <Image Include="assets\Tiles\Map_tile_34.png" />
-    <Image Include="assets\Tiles\Map_tile_35.png" />
-    <Image Include="assets\Tiles\Map_tile_36.png" />
-    <Image Include="assets\Tiles\Map_tile_37.png" />
-    <Image Include="assets\Tiles\Map_tile_38.png" />
-    <Image Include="assets\Tiles\Map_tile_39.png" />
-    <Image Include="assets\Tiles\Map_tile_40.png" />
-    <Image Include="assets\Tiles\Map_tile_41.png" />
-    <Image Include="assets\Tiles\Map_tile_42.png" />
-    <Image Include="assets\Tiles\Map_tile_43.png" />
-    <Image Include="assets\Tiles\Map_tile_44.png" />
-    <Image Include="assets\Tiles\Map_tile_45.png" />
-    <Image Include="assets\Tiles\Map_tile_46.png" />
-    <Image Include="assets\Tiles\Map_tile_47.png" />
-    <Image Include="assets\Tiles\Map_tile_48.png" />
-    <Image Include="assets\Tiles\Map_tile_49.png" />
-    <Image Include="assets\Tiles\Map_tile_50.png" />
-    <Image Include="assets\Tiles\Map_tile_51.png" />
-    <Image Include="assets\Tiles\Map_tile_52.png" />
-    <Image Include="assets\Tiles\Map_tile_53.png" />
-    <Image Include="assets\Tiles\Map_tile_54.png" />
-    <Image Include="assets\Tiles\Map_tile_55.png" />
-    <Image Include="assets\Tiles\Map_tile_56.png" />
-    <Image Include="assets\Tiles\Map_tile_57.png" />
-    <Image Include="assets\Tiles\Map_tile_58.png" />
-    <Image Include="assets\Tiles\Map_tile_59.png" />
-    <Image Include="assets\Tiles\Map_tile_60.png" />
-    <Image Include="assets\Tiles\Map_tile_61.png" />
-    <Image Include="assets\Tiles\Map_tile_62.png" />
-    <Image Include="assets\Tiles\Map_tile_63.png" />
-    <Image Include="assets\Tiles\Map_tile_64.png" />
-    <Image Include="assets\Tiles\Map_tile_65.png" />
-    <Image Include="assets\Tiles\Map_tile_66.png" />
-    <Image Include="assets\Tiles\Map_tile_67.png" />
-    <Image Include="assets\Tiles\Map_tile_68.png" />
-    <Image Include="assets\Tiles\Map_tile_69.png" />
-    <Image Include="assets\Tiles\Map_tile_70.png" />
-    <Image Include="assets\Tiles\Map_tile_71.png" />
-    <Image Include="assets\Tiles\Map_tile_72.png" />
-    <Image Include="assets\Tiles\Map_tile_73.png" />
-    <Image Include="assets\Tiles\Map_tile_74.png" />
-    <Image Include="assets\Tiles\Map_tile_75.png" />
-    <Image Include="assets\Tiles\Map_tile_76.png" />
-    <Image Include="assets\Tiles\Map_tile_77.png" />
-    <Image Include="assets\Tiles\Map_tile_78.png" />
-    <Image Include="assets\Tiles\Map_tile_79.png" />
-    <Image Include="assets\Tiles\Map_tile_80.png" />
-    <Image Include="assets\Tiles\Map_tile_81.png" />
-    <Image Include="assets\Tiles\Map_tile_82.png" />
-    <Image Include="assets\Tiles\Map_tile_83.png" />
-    <Image Include="assets\Tiles\Map_tile_84.png" />
-    <Image Include="assets\Tiles\Map_tile_85.png" />
-    <Image Include="assets\Tiles\Map_tile_86.png" />
-    <Image Include="assets\Tiles\Map_tile_87.png" />
-    <Image Include="assets\Tiles\Map_tile_88.png" />
-    <Image Include="assets\Tiles\Map_tile_89.png" />
-    <Image Include="assets\Tiles\Map_tile_90.png" />
-    <Image Include="assets\Tiles\Map_tile_91.png" />
-    <Image Include="assets\Tiles\Map_tile_92.png" />
-    <Image Include="assets\Tiles\Map_tile_93.png" />
-    <Image Include="assets\Tiles\Map_tile_94.png" />
-    <Image Include="assets\Tiles\Map_tile_95.png" />
-    <Image Include="assets\Tiles\Map_tile_96.png" />
-    <Image Include="assets\Tiles\Map_tile_97.png" />
-    <Image Include="assets\Tiles\Map_tile_98.png" />
-    <Image Include="assets\Tiles\Map_tile_99.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <Library Include="..\..\..\..\..\..\vs libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.lib" />
     <Library Include="SDL2.lib" />
     <Library Include="SDL2main.lib" />
     <Library Include="SDL2test.lib" />
+    <Library Include="SDL2_ttf.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\cleric_spritesheet.png" />
+    <Image Include="assets\flameball.png" />
+    <Image Include="assets\Map_tiles.png" />
+    <Image Include="assets\Map_tile_123.png" />
+    <Image Include="assets\ranger_spritesheet.png" />
+    <Image Include="assets\wizard_spritesheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\Pixellari.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,7 @@
 #pragma once
 #include "ECS.h"
 #include "Components.h"
-#include "../Vector2D.h"
+#include "..\Vector2D.h"
 
 struct TransformComponent : public Component {
 
@@ -10,20 +10,26 @@ struct TransformComponent : public Component {
 
 	int height = 32;
 	int width = 32;
-	int scale = 1;
+	float scale = 1;
 
 	int speed = 3;
 
 	TransformComponent() { position.Zero(); }
 
-	TransformComponent(int sc) { position.Zero(); scale = sc; }
+	TransformComponent(float sc) { 
+
+		position.x = 640;
+		position.y = 360;
+		scale = sc; 
+	}
 
 	TransformComponent(float x, float y) {
+
 		position.x = x;
 		position.y = y;
 	}
 
-	TransformComponent(float x, float y, int h, int w, int sc) { 
+	TransformComponent(float x, float y, int h, int w, float sc) { 
 		position.x = x;
 		position.y = y;
 		height = h;
@@ -32,6 +38,10 @@ struct TransformComponent : public Component {
 	}
 
 	void init() override { velocity.Zero(); }
-	void update() override { position.x += velocity.x * speed; position.y += velocity.y * speed; }
+
+	void update() override { 
+		position.x += velocity.x * speed;
+		position.y += velocity.y * speed; 
+	}
 
 };

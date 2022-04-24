@@ -13,15 +13,6 @@
     <Filter Include="GameEngine\ECS">
       <UniqueIdentifier>{7f70a479-d0e7-43d4-9bb8-a7f7a1fb4a3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="assets\characters">
-      <UniqueIdentifier>{31384711-ea2a-4dfc-9f33-c0e651293f9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="assets\tiles">
-      <UniqueIdentifier>{a671f526-dcab-4a39-b8bb-2edc1274458f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="assets\maps">
-      <UniqueIdentifier>{3fa88b23-2ad9-4e7b-a290-4e8b5a364a8e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngine\Game.h">
@@ -327,6 +318,30 @@
     <ClInclude Include="GameEngine\ECS\TileComponent.h">
       <Filter>GameEngine\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngine\ECS\Animation.h">
+      <Filter>GameEngine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\AssetManager.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\ECS\ProjectileComponent.h">
+      <Filter>GameEngine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Frameworks\SDL_ttf.h">
+      <Filter>Frameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\ECS\UILabel.h">
+      <Filter>GameEngine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Tile.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Grid.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Pathfinding.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libjpeg-9.dll" />
@@ -345,8 +360,15 @@
     <None Include="Frameworks\SDL_config_macosx.h.orig">
       <Filter>Frameworks</Filter>
     </None>
-    <None Include="assets\maps\testMap.map">
-      <Filter>assets\maps</Filter>
+    <None Include="SDL2_ttf.dll" />
+    <None Include="assets\testMap.map">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="assets\testMap2.map">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="assets\Cave1.map">
+      <Filter>assets</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -374,453 +396,40 @@
     <ClCompile Include="GameEngine\ECS\ECS.cpp">
       <Filter>GameEngine\ECS</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="assets\Tiles\Map_tile_03.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_04.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_05.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_06.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_07.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_08.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_09.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_10.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_11.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_12.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_13.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_14.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_15.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_16.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_17.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_18.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_19.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_20.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_21.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_22.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_23.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_24.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_25.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_26.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_27.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_28.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_29.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_30.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_31.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_32.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_33.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_34.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_35.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_36.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_37.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_38.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_39.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_40.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_41.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_42.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_43.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_44.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_45.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_46.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_47.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_48.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_49.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_50.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_51.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_52.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_53.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_54.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_55.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_56.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_57.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_58.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_59.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_60.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_61.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_62.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_63.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_64.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_65.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_66.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_67.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_68.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_69.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_70.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_71.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_72.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_73.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_74.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_75.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_76.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_77.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_78.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_79.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_80.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_81.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_82.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_83.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_84.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_85.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_86.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_87.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_88.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_89.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_90.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_91.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_92.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_93.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_94.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_95.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_96.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_97.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_98.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_99.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_100.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_101.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_102.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_103.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_104.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_105.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_106.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_107.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_108.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_109.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_110.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_111.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_112.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_113.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_114.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_115.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_116.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_117.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_118.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_119.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_120.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_121.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_122.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_123.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_124.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_125.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_126.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_127.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_128.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_129.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_130.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_131.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_132.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_133.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_134.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_135.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_136.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_137.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_138.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_139.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_140.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_141.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_142.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_143.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_01.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Tiles\Map_tile_02.png">
-      <Filter>assets\tiles</Filter>
-    </Image>
-    <Image Include="assets\Characters\cleric_spritesheet.png">
-      <Filter>assets\characters</Filter>
-    </Image>
-    <Image Include="assets\Characters\ranger_spritesheet.png">
-      <Filter>assets\characters</Filter>
-    </Image>
-    <Image Include="assets\Characters\warrior_spritesheet.png">
-      <Filter>assets\characters</Filter>
-    </Image>
-    <Image Include="assets\Characters\wizard_spritesheet.png">
-      <Filter>assets\characters</Filter>
-    </Image>
+    <ClCompile Include="GameEngine\AssetManager.cpp">
+      <Filter>GameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2main.lib" />
     <Library Include="SDL2test.lib" />
     <Library Include="SDL2.lib" />
+    <Library Include="SDL2_ttf.lib" />
+    <Library Include="..\..\..\..\..\..\vs libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\cleric_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\flameball.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\Map_tile_123.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\Map_tiles.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\ranger_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\wizard_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\Pixellari.ttf">
+      <Filter>assets</Filter>
+    </Font>
   </ItemGroup>
 </Project>

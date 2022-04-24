@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/C++ RPG/GameEngine/Grid.h
+/C++ RPG/GameEngine/Pathfinding.h
+/C++ RPG/GameEngine/Tile.h
