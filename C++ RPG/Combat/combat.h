@@ -13,6 +13,8 @@
 #define DEF   2
 #define REST  3
 
+// TODO: Fix HP not updating, change all Tile& to Tile* and use pointers, Hit %, AP cost, diff. attack types, AI integration, add comments, and general cleanliness
+
 class combat
 {
 private:
@@ -29,6 +31,7 @@ private:
 	tile combatants[N];
 	tile friendly[N/2];
 	tile enemy[N/2];
+	friend class AI;
 public:
 	combat(character&, character&, character&, character&, character&, character&); // combat init function; heart of the combat loop
 	~combat(); // combat end function 
@@ -73,7 +76,7 @@ void combat::sort(tile characters[])
 {
 	for (size_t i = 0; i < N - 1; i++)
 	{
-		if (characters[i].combatant.FP <= characters[i+1].combatant.FP)
+		if (characters[i].combatant.AP <= characters[i+1].combatant.AP)
 		{
 			tile temp = characters[i+1];
 			characters[i+1] = characters[i];
@@ -125,7 +128,7 @@ void combat::defend(tile& current)
 	if (*current.alive)
 	{
 		current.def *= 1.2;
-		std::cout << current.combatant.name << " defended\n" << current.combatant.name << "'s current HP: " << current.combatant.HP << " | " << current.combatant.name << "'s current FP: " << current.combatant.FP << "\n";
+		std::cout << current.combatant.name << " defended\n" << current.combatant.name << "'s current HP: " << current.combatant.HP << " | " << current.combatant.name << "'s current AP: " << current.combatant.AP << "\n";
 		next_turn();
 	}
 	else
@@ -139,7 +142,7 @@ void combat::rest(tile& current)
 {
 	if (*current.alive)
 	{
-		std::cout << current.combatant.name << " did nothing\n" << current.combatant.name << "'s current HP: " << current.combatant.HP << " | " << current.combatant.name << "'s current FP: " << current.combatant.FP << "\n";
+		std::cout << current.combatant.name << " did nothing\n" << current.combatant.name << "'s current HP: " << current.combatant.HP << " | " << current.combatant.name << "'s current AP: " << current.combatant.AP << "\n";
 		next_turn();
 	}
 	else
@@ -163,12 +166,12 @@ combat::combat(character& first, character& second, character& third, character&
 		short eselection = 0;
 		short target = 0;
 		short target2 = 0;
-		if (combatants[counter].is_enemy == 0)
+		if (!combatants[counter].is_enemy)
 		{
 			fselection = rand() % 3 + 1;
 			switch (fselection)
 			{
-			case 1:
+			case ATK:
 				target = rand() % 3;
 				while (!*enemy[target].alive)
 				{
@@ -180,10 +183,10 @@ combat::combat(character& first, character& second, character& third, character&
 					edeath++;
 				}
 				break;
-			case 2:
+			case DEF:
 				defend(combatants[counter]);
 				break;
-			case 3:
+			case REST:
 				rest(combatants[counter]);
 				break;
 			default:
@@ -195,7 +198,7 @@ combat::combat(character& first, character& second, character& third, character&
 			eselection = rand() % 3 + 1;
 			switch (eselection)
 			{
-			case 1:
+			case ATK:
 				target2 = rand() % 3;
 				while (!*friendly[target2].alive)
 				{
@@ -207,10 +210,10 @@ combat::combat(character& first, character& second, character& third, character&
 					fdeath++;
 				}
 				break;
-			case 2:
+			case DEF:
 				defend(combatants[counter]);
 				break;
-			case 3:
+			case REST:
 				rest(combatants[counter]);
 				break;
 			default:
@@ -222,12 +225,6 @@ combat::combat(character& first, character& second, character& third, character&
 			std::cout << "Combat ends.\n";
 			break;
 		}
-		/*while (!*combatants[counter].alive)
-				{
-					counter++;
-					counter %= N;
-				}
-		counter %= N;*/
 	}
 	
 }
