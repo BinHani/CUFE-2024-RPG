@@ -6,13 +6,16 @@
 #include  <stdio.h>
 #include  <string>
 
-#define WARRIOR 10
+// may be better to change these to an enum
+/*#define WARRIOR 10
 #define MAGE 20
 #define CLERIC 30
 #define SMALL_TREELING 40
 #define LARGE_TREELING 50
 #define SKELETON_HEAD 60
 #define WOLF 70
+*/
+enum types {WARRIOR, MAGE, CLERIC, SMALL_TREELING, LARGE_TREELING, SKELETON_HEAD, WOLF};
 
 using std::string;
 
