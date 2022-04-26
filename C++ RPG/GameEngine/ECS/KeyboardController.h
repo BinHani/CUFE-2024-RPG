@@ -1,6 +1,7 @@
 #pragma once
 #include "..\Game.h"
 #include "ECS.h"
+#include "..\WorldState.h"
 #include "Components.h"
 #include <queue>
 
@@ -23,274 +24,299 @@ public:
 
 	void update() override {
 
-		if (Game::event.type == SDL_KEYDOWN) {
+		switch (_worldState) {
 
-			//inputDelayer.push(Game::event.key.keysym.sym);
+		case stateRealTime:
 
-			switch (Game::event.key.keysym.sym) {
+			if (Game::event.type == SDL_KEYDOWN) {
 
-			case SDLK_w:
+				//inputDelayer.push(Game::event.key.keysym.sym);
 
-				if (keystates[SDL_SCANCODE_A]) {
-					//inputDelayer.push(SDL_SCANCODE_A);
-					transform->velocity.x = -1;
-					transform->velocity.y = -1;
-					sprite->Play("WalkUp");
+				switch (Game::event.key.keysym.sym) {
+
+				case SDLK_w:
+
+					if (keystates[SDL_SCANCODE_A]) {
+						//inputDelayer.push(SDL_SCANCODE_A);
+						transform->velocity.x = -1;
+						transform->velocity.y = -1;
+						sprite->Play("WalkUp");
+					}
+
+					else if (keystates[SDL_SCANCODE_S]) {
+						//inputDelayer.push(SDL_SCANCODE_S);
+						transform->velocity.y = 0;
+						sprite->Play("Idle");
+					}
+
+					else if (keystates[SDL_SCANCODE_D]) {
+						//inputDelayer.push(SDL_SCANCODE_D);
+						transform->velocity.x = 1;
+						transform->velocity.y = -1;
+						sprite->Play("WalkUp");
+					}
+
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.y = -1;
+						sprite->Play("WalkUp");
+					}
+
+					break;
+
+				case SDLK_a:
+
+					if (keystates[SDL_SCANCODE_W]) {
+						//inputDelayer.push(SDL_SCANCODE_W);
+						transform->velocity.x = -1;
+						transform->velocity.y = -1;
+						sprite->Play("WalkLeft");
+					}
+
+					else if (keystates[SDL_SCANCODE_S]) {
+						//inputDelayer.push(SDL_SCANCODE_S);
+						transform->velocity.x = -1;
+						transform->velocity.y = 1;
+						sprite->Play("WalkLeft");
+					}
+
+					else if (keystates[SDL_SCANCODE_D]) {
+						//inputDelayer.push(SDL_SCANCODE_D);
+						transform->velocity.x = 0;
+						sprite->Play("Idle");
+					}
+
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.x = -1;
+						sprite->Play("WalkLeft");
+					}
+
+					break;
+
+				case SDLK_s:
+
+					if (keystates[SDL_SCANCODE_W]) {
+						//inputDelayer.push(SDL_SCANCODE_W);
+						transform->velocity.y = 0;
+						sprite->Play("Idle");
+					}
+
+					else if (keystates[SDL_SCANCODE_A]) {
+						//inputDelayer.push(SDL_SCANCODE_A);
+						transform->velocity.x = -1;
+						transform->velocity.y = 1;
+						sprite->Play("WalkDown");
+					}
+
+					else if (keystates[SDL_SCANCODE_D]) {
+						//inputDelayer.push(SDL_SCANCODE_D);
+						transform->velocity.x = 1;
+						transform->velocity.y = 1;
+						sprite->Play("WalkDown");
+					}
+
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.y = 1;
+						sprite->Play("WalkDown");
+					}
+
+					break;
+
+				case SDLK_d:
+
+					if (keystates[SDL_SCANCODE_W]) {
+						//inputDelayer.push(SDL_SCANCODE_W);
+						transform->velocity.x = 1;
+						transform->velocity.y = -1;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+					}
+
+					else if (keystates[SDL_SCANCODE_A]) {
+						//inputDelayer.push(SDL_SCANCODE_A);
+						transform->velocity.x = 0;
+						sprite->Play("Idle");
+					}
+
+					else if (keystates[SDL_SCANCODE_S]) {
+						//inputDelayer.push(SDL_SCANCODE_S);
+						transform->velocity.x = 1;
+						transform->velocity.y = 1;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+					}
+
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.x = 1;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+					}
+					break;
 				}
-
-				else if (keystates[SDL_SCANCODE_S]) {
-					//inputDelayer.push(SDL_SCANCODE_S);
-					transform->velocity.y = 0;
-					sprite->Play("Idle");
-				}
-
-				else if (keystates[SDL_SCANCODE_D]) {
-					//inputDelayer.push(SDL_SCANCODE_D);
-					transform->velocity.x = 1;
-					transform->velocity.y = -1;
-					sprite->Play("WalkUp");
-				}
-
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.y = -1;
-					sprite->Play("WalkUp");
-				}
-
-				break;
-
-			case SDLK_a:
-
-				if (keystates[SDL_SCANCODE_W]) {
-					//inputDelayer.push(SDL_SCANCODE_W);
-					transform->velocity.x = -1;
-					transform->velocity.y = -1;
-					sprite->Play("WalkLeft");
-				}
-
-				else if (keystates[SDL_SCANCODE_S]) {
-					//inputDelayer.push(SDL_SCANCODE_S);
-					transform->velocity.x = -1;
-					transform->velocity.y = 1;
-					sprite->Play("WalkLeft");
-				}
-
-				else if (keystates[SDL_SCANCODE_D]) {
-					//inputDelayer.push(SDL_SCANCODE_D);
-					transform->velocity.x = 0;
-					sprite->Play("Idle");
-				}
-
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.x = -1;
-					sprite->Play("WalkLeft");
-				}
-
-				break;
-
-			case SDLK_s:
-
-				if (keystates[SDL_SCANCODE_W]) {
-					//inputDelayer.push(SDL_SCANCODE_W);
-					transform->velocity.y = 0;
-					sprite->Play("Idle");
-				}
-
-				else if (keystates[SDL_SCANCODE_A]) {
-					//inputDelayer.push(SDL_SCANCODE_A);
-					transform->velocity.x = -1;
-					transform->velocity.y = 1;
-					sprite->Play("WalkDown");
-				}
-
-				else if (keystates[SDL_SCANCODE_D]) {
-					//inputDelayer.push(SDL_SCANCODE_D);
-					transform->velocity.x = 1;
-					transform->velocity.y = 1;
-					sprite->Play("WalkDown");
-				}
-
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.y = 1;
-					sprite->Play("WalkDown");
-				}
-
-				break;
-
-			case SDLK_d:
-
-				if (keystates[SDL_SCANCODE_W]) {
-					//inputDelayer.push(SDL_SCANCODE_W);
-					transform->velocity.x = 1;
-					transform->velocity.y = -1;
-					sprite->Play("WalkLeft");
-					sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
-				}
-
-				else if (keystates[SDL_SCANCODE_A]) {
-					//inputDelayer.push(SDL_SCANCODE_A);
-					transform->velocity.x = 0;
-					sprite->Play("Idle");
-				}
-
-				else if (keystates[SDL_SCANCODE_S]) {
-					//inputDelayer.push(SDL_SCANCODE_S);
-					transform->velocity.x = 1;
-					transform->velocity.y = 1;
-					sprite->Play("WalkLeft");
-					sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
-				}
-
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.x = 1;
-					sprite->Play("WalkLeft");
-					sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
-				}
-				break;
-
-			default:
-				break;
 			}
-		}
 
-		if (Game::event.type == SDL_KEYUP) {
+			if (Game::event.type == SDL_KEYUP) {
 
-			//inputDelayer.push(Game::event.key.keysym.sym);
+				//inputDelayer.push(Game::event.key.keysym.sym);
 
-			switch (Game::event.key.keysym.sym) {
+				switch (Game::event.key.keysym.sym) {
 
-			case SDLK_w:
+				case SDLK_w:
 
-				if (keystates[SDL_SCANCODE_A]) {
-					//inputDelayer.push(SDL_SCANCODE_A);
-					transform->velocity.x = -1;
-					transform->velocity.y = 0;
-					sprite->Play("WalkLeft");
-				}
+					if (keystates[SDL_SCANCODE_A]) {
+						//inputDelayer.push(SDL_SCANCODE_A);
+						transform->velocity.x = -1;
+						transform->velocity.y = 0;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_NONE;
+					}
 
-				else if (keystates[SDL_SCANCODE_S]) {
-					//inputDelayer.push(SDL_SCANCODE_S);
-					transform->velocity.y = 1;
-					sprite->Play("WalkDown");
-				}
+					else if (keystates[SDL_SCANCODE_S]) {
+						//inputDelayer.push(SDL_SCANCODE_S);
+						transform->velocity.y = 1;
+						sprite->Play("WalkDown");
+					}
 
-				else if (keystates[SDL_SCANCODE_D]) {
-					//inputDelayer.push(SDL_SCANCODE_D);
-					transform->velocity.x = 1;
-					transform->velocity.y = 0;
-					sprite->Play("WalkLeft");
-					sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+					else if (keystates[SDL_SCANCODE_D]) {
+						//inputDelayer.push(SDL_SCANCODE_D);
+						transform->velocity.x = 1;
+						transform->velocity.y = 0;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
 
-				}
+					}
 
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.y = 0;
-					sprite->Play("Idle");
-				}
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.y = 0;
+						sprite->Play("Idle");
+					}
 
-				break;
+					break;
 
-			case SDLK_a:
+				case SDLK_a:
 
-				if (keystates[SDL_SCANCODE_W]) {
-					//inputDelayer.push(SDL_SCANCODE_W);
-					transform->velocity.x = 0;
-					transform->velocity.y = -1;
-					sprite->Play("WalkUp");
-				}
-
-				else if (keystates[SDL_SCANCODE_S]) {
-					//inputDelayer.push(SDL_SCANCODE_S);
-					transform->velocity.x = 0;
-					transform->velocity.y = 1;
-					sprite->Play("WalkDown");
-				}
-
-				else if (keystates[SDL_SCANCODE_D]) {
-					//inputDelayer.push(SDL_SCANCODE_D);
-					transform->velocity.x = 1;
-					sprite->Play("WalkLeft");
-					sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
-				}
-
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.x = 0;
-					sprite->Play("Idle");
-				}
-
-				break;
-
-			case SDLK_s:
-
-				if (keystates[SDL_SCANCODE_W]) {
-					//inputDelayer.push(SDL_SCANCODE_W);
-					transform->velocity.y = -1;
-					sprite->Play("WalkUp");
-				}
-
-				else if (keystates[SDL_SCANCODE_A]) {
-					//inputDelayer.push(SDL_SCANCODE_A);
-					transform->velocity.x = -1;
-					transform->velocity.y = 0;
-					sprite->Play("WalkLeft");
-				}
-
-				else if (keystates[SDL_SCANCODE_D]) {
-					//inputDelayer.push(SDL_SCANCODE_D);
-					transform->velocity.x = 1;
-					transform->velocity.y = 1;
-					sprite->Play("WalkDown");
-					sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
-				}
-
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.y = 0;
-					sprite->Play("Idle");
-				}
-
-				break;
-
-			case SDLK_d:
-
-				if (keystates[SDL_SCANCODE_W]) {
-					//inputDelayer.push(SDL_SCANCODE_W);
-					transform->velocity.x = 0;
-					transform->velocity.y = -1;
-					sprite->Play("WalkUp");
 					sprite->spriteFlip = SDL_FLIP_NONE;
-				}
 
-				else if (keystates[SDL_SCANCODE_A]) {
-					//inputDelayer.push(SDL_SCANCODE_A);
-					transform->velocity.x = -1;
-					sprite->Play("WalkLeft");
-					sprite->spriteFlip = SDL_FLIP_NONE;
-				}
+					if (keystates[SDL_SCANCODE_W]) {
+						//inputDelayer.push(SDL_SCANCODE_W);
+						transform->velocity.x = 0;
+						transform->velocity.y = -1;
+						sprite->Play("WalkUp");
+					}
 
-				else if (keystates[SDL_SCANCODE_S]) {
-					//inputDelayer.push(SDL_SCANCODE_S);
-					transform->velocity.x = 0;
-					transform->velocity.y = 1;
-					sprite->Play("WalkDown");
-					sprite->spriteFlip = SDL_FLIP_NONE;
-				}
+					else if (keystates[SDL_SCANCODE_S]) {
+						//inputDelayer.push(SDL_SCANCODE_S);
+						transform->velocity.x = 0;
+						transform->velocity.y = 1;
+						sprite->Play("WalkDown");
+					}
 
-				else {
-					//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
-					transform->velocity.x = 0;
-					sprite->Play("Idle");
-					sprite->spriteFlip = SDL_FLIP_NONE;
-				}
-				break;
+					else if (keystates[SDL_SCANCODE_D]) {
+						//inputDelayer.push(SDL_SCANCODE_D);
+						transform->velocity.x = 1;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+					}
 
-			default:
-				break;
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.x = 0;
+						sprite->Play("Idle");
+					}
+
+					break;
+
+				case SDLK_s:
+
+					if (keystates[SDL_SCANCODE_W]) {
+						//inputDelayer.push(SDL_SCANCODE_W);
+						transform->velocity.y = -1;
+						sprite->Play("WalkUp");
+					}
+
+					else if (keystates[SDL_SCANCODE_A]) {
+						//inputDelayer.push(SDL_SCANCODE_A);
+						transform->velocity.x = -1;
+						transform->velocity.y = 0;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_NONE;
+					}
+
+					else if (keystates[SDL_SCANCODE_D]) {
+						//inputDelayer.push(SDL_SCANCODE_D);
+						transform->velocity.x = 1;
+						transform->velocity.y = 1;
+						sprite->Play("WalkDown");
+						sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+					}
+
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.y = 0;
+						sprite->Play("Idle");
+					}
+
+					break;
+
+				case SDLK_d:
+
+					if (keystates[SDL_SCANCODE_W]) {
+						//inputDelayer.push(SDL_SCANCODE_W);
+						transform->velocity.x = 0;
+						transform->velocity.y = -1;
+						sprite->Play("WalkUp");
+						sprite->spriteFlip = SDL_FLIP_NONE;
+					}
+
+					else if (keystates[SDL_SCANCODE_A]) {
+						//inputDelayer.push(SDL_SCANCODE_A);
+						transform->velocity.x = -1;
+						sprite->Play("WalkLeft");
+						sprite->spriteFlip = SDL_FLIP_NONE;
+					}
+
+					else if (keystates[SDL_SCANCODE_S]) {
+						//inputDelayer.push(SDL_SCANCODE_S);
+						transform->velocity.x = 0;
+						transform->velocity.y = 1;
+						sprite->Play("WalkDown");
+						sprite->spriteFlip = SDL_FLIP_NONE;
+					}
+
+					else {
+						//inputDelayer.push(SDL_SCANCODE_UNKNOWN);
+						transform->velocity.x = 0;
+						sprite->Play("Idle");
+						sprite->spriteFlip = SDL_FLIP_NONE;
+					}
+					break;
+				}
+			}
+
+			break;
+
+		case stateTurnBased:
+
+			if (Game::event.type == SDL_KEYDOWN) {
+
+				switch (Game::event.key.keysym.sym) {
+
+				case SDLK_j:
+					//attack
+					break;
+
+				case SDLK_k:
+					//defend
+					break;
+
+				case SDLK_l:
+					//rest
+					break;
+				}
 			}
 		}
 	}

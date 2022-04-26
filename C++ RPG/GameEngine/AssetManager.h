@@ -12,7 +12,6 @@ public:
 	AssetManager(Manager* man);
 	~AssetManager();
 
-	void CreatePlayerCharacter(Entity& charName, Vector2D pos, int h, int w, float sc, bool isAnimated, std::string id);
 	void CreateProjectile(Entity& projName, Vector2D pos, Vector2D vel, int range, int speed, std::string id);
 
 	void AddTexture(std::string id, const char* path);

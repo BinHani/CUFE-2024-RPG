@@ -144,6 +144,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Combat\character.h" />
+    <ClInclude Include="Combat\combat.h" />
+    <ClInclude Include="Combat\tile.h" />
     <ClInclude Include="Frameworks\begin_code.h" />
     <ClInclude Include="Frameworks\close_code.h" />
     <ClInclude Include="Frameworks\SDL.h" />
@@ -239,9 +242,11 @@
     <ClInclude Include="GameEngine\ECS\ColliderComponent.h" />
     <ClInclude Include="GameEngine\ECS\Components.h" />
     <ClInclude Include="GameEngine\ECS\ECS.h" />
+    <ClInclude Include="GameEngine\ECS\FightNight.h" />
     <ClInclude Include="GameEngine\ECS\KeyboardController.h" />
     <ClInclude Include="GameEngine\ECS\ProjectileComponent.h" />
     <ClInclude Include="GameEngine\ECS\SpriteComponent.h" />
+    <ClInclude Include="GameEngine\ECS\StatusComponent.h" />
     <ClInclude Include="GameEngine\ECS\TileComponent.h" />
     <ClInclude Include="GameEngine\ECS\TransformComponent.h" />
     <ClInclude Include="GameEngine\ECS\UILabel.h" />
@@ -252,10 +257,12 @@
     <ClInclude Include="GameEngine\Pathfinding.h" />
     <ClInclude Include="GameEngine\TextureManager.h" />
     <ClInclude Include="GameEngine\Tile.h" />
+    <ClInclude Include="GameEngine\Transition.h" />
     <ClInclude Include="GameEngine\Vector2D.h" />
+    <ClInclude Include="GameEngine\WorldState.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\Cave1.map" />
+    <None Include="assets\cave.map" />
     <None Include="assets\testMap.map" />
     <None Include="assets\testMap2.map" />
     <None Include="Frameworks\SDL_config.h.cmake" />
@@ -271,6 +278,7 @@
     <None Include="zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Combat\combat.cpp" />
     <ClCompile Include="GameEngine\AssetManager.cpp" />
     <ClCompile Include="GameEngine\Collision.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -291,12 +299,16 @@
     <Library Include="SDL2_ttf.lib" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\blinds.png" />
     <Image Include="assets\cleric_spritesheet.png" />
     <Image Include="assets\flameball.png" />
-    <Image Include="assets\Map_tiles.png" />
+    <Image Include="assets\cave.png" />
     <Image Include="assets\Map_tile_123.png" />
     <Image Include="assets\ranger_spritesheet.png" />
+    <Image Include="assets\spoopy_spritesheet.png" />
+    <Image Include="assets\underground_battle.png" />
     <Image Include="assets\wizard_spritesheet.png" />
+    <Image Include="D:\Desktop\eyes.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\Pixellari.ttf" />

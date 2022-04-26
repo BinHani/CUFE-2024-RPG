@@ -21,7 +21,7 @@ public:
 
 	~UILabel() {}
 
-	void SetLabelText(std::string text, std::string font) {
+	void SetLabelText(const std::string& text, std::string font) {
 
 		SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont(labelFont), text.c_str(), textColour);
 		labelTexture = SDL_CreateTextureFromSurface(Game::renderer, surf);
@@ -31,7 +31,11 @@ public:
 
 	}
 
-	void draw() override { SDL_RenderCopy(Game::renderer, labelTexture, nullptr, &position); }
+	void draw() override {
+
+		SDL_RenderCopy(Game::renderer, labelTexture, nullptr, &position);
+		SDL_DestroyTexture(labelTexture);
+	}
 
 private:
 	SDL_Rect position;

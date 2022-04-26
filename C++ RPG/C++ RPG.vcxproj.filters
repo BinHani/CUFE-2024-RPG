@@ -13,6 +13,9 @@
     <Filter Include="GameEngine\ECS">
       <UniqueIdentifier>{7f70a479-d0e7-43d4-9bb8-a7f7a1fb4a3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Combat">
+      <UniqueIdentifier>{b5c95eca-7a5a-4b50-877b-0e1341cbc481}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngine\Game.h">
@@ -342,6 +345,27 @@
     <ClInclude Include="GameEngine\Pathfinding.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Combat\combat.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\ECS\StatusComponent.h">
+      <Filter>GameEngine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Combat\character.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Transition.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\WorldState.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\ECS\FightNight.h">
+      <Filter>GameEngine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Combat\tile.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libjpeg-9.dll" />
@@ -367,7 +391,7 @@
     <None Include="assets\testMap2.map">
       <Filter>assets</Filter>
     </None>
-    <None Include="assets\Cave1.map">
+    <None Include="assets\cave.map">
       <Filter>assets</Filter>
     </None>
   </ItemGroup>
@@ -399,6 +423,9 @@
     <ClCompile Include="GameEngine\AssetManager.cpp">
       <Filter>GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Combat\combat.cpp">
+      <Filter>Combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2main.lib" />
@@ -417,13 +444,25 @@
     <Image Include="assets\Map_tile_123.png">
       <Filter>assets</Filter>
     </Image>
-    <Image Include="assets\Map_tiles.png">
+    <Image Include="assets\cave.png">
       <Filter>assets</Filter>
     </Image>
     <Image Include="assets\ranger_spritesheet.png">
       <Filter>assets</Filter>
     </Image>
     <Image Include="assets\wizard_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\blinds.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="D:\Desktop\eyes.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\underground_battle.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\spoopy_spritesheet.png">
       <Filter>assets</Filter>
     </Image>
   </ItemGroup>

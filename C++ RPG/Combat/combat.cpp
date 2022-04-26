@@ -1,6 +1,6 @@
 #include "combat.h"
 
-int main()
+int placeholder()
 {
     character fight1; character fight2; character fight3; character fight4; character fight5; character fight6;
     fight1.name = "fighter1"; fight1.type = "fighter"; fight1.HP = 80; fight1.FP = 30; fight1.DAMAGE = 30; fight1.RESISTANCE = 40;

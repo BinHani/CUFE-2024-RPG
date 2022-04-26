@@ -27,11 +27,7 @@ public:
 
 	void init() override {
 
-			if (!entity->hasComponent<TransformComponent>()) {
-
-			entity->addComponent<TransformComponent>();
-		}
-	
+		if (!entity->hasComponent<TransformComponent>()) { entity->addComponent<TransformComponent>(); }
 		transform = &entity->getComponent<TransformComponent>();
 
 		tex = TextureManager::LoadTexture("assets/Map_tile_123.png");

@@ -7,6 +7,7 @@
 #include  <stdio.h>
 #include  <time.h>
 #include "character.h"
+#include "tile.h"
 
 #define N 	  6 // max no. of combatants
 #define ATK   1
@@ -17,15 +18,7 @@ class combat
 {
 private:
 	uint8_t counter; // turn counter that indicates the combatant in this turn
-	struct tile // fundamental combat unit
-	{
-		character combatant; // character standing on the tile
-		bool is_enemy; // tile allegiance (i.e., 0 for friendly or 1 for enemy)
-		bool* alive; // tile state (i.e., 0 for dead or 1 for alive)
-		uint8_t atk_pwr; // tile attack power
-		uint8_t def; // tile defense rating
-		tile(){};
-	};
+
 	tile combatants[N];
 	tile friendly[N/2];
 	tile enemy[N/2];
@@ -69,6 +62,7 @@ void combat::assemble(character& first, character& second, character& third, cha
 	
 }
 
+//needs fixing
 void combat::sort(tile characters[])
 {
 	for (size_t i = 0; i < N - 1; i++)

@@ -7,3 +7,5 @@
 #include "TileComponent.h"
 #include "ProjectileComponent.h"
 #include "UILabel.h"
+#include "StatusComponent.h"
+#include "FightNight.h"

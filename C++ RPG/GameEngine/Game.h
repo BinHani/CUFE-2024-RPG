@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "SDL_image.h"
+#include "Transition.h"
 #include <iostream>
 #include <vector>
 
@@ -31,8 +32,10 @@ public:
 
 		groupMap,
 		groupPlayerCharacters,
+		groupEnemyCharacters,
 		groupColliders,
-		groupProjectiles
+		groupProjectiles,
+		groupDoors
 	};
 
 private:

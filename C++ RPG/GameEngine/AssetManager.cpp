@@ -5,15 +5,6 @@ AssetManager::AssetManager(Manager* man) : manager(man) {}
 
 AssetManager::~AssetManager() {}
 
-void AssetManager::CreatePlayerCharacter(Entity& charName, Vector2D pos, int h, int w, float sc, bool isAnimated, std::string id) {
-	
-	charName.addComponent<TransformComponent>(pos.x, pos.y, h, w, sc);
-	charName.addComponent<SpriteComponent>(id, isAnimated);
-	charName.addComponent<ColliderComponent>(id);
-    charName.addComponent<KeyboardController>();
-	charName.addGroup(Game::groupPlayerCharacters);
-}
-
 void AssetManager::CreateProjectile(Entity& projName, Vector2D pos, Vector2D vel, int range, int speed, std::string id) {
 
 	projName.addComponent<TransformComponent>(pos.x, pos.y, 32, 32, 1);

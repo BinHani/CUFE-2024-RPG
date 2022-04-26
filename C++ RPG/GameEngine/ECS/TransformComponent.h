@@ -2,6 +2,7 @@
 #include "ECS.h"
 #include "Components.h"
 #include "..\Vector2D.h"
+#include "..\WorldState.h"
 
 struct TransformComponent : public Component {
 
@@ -11,7 +12,6 @@ struct TransformComponent : public Component {
 	int height = 32;
 	int width = 32;
 	float scale = 1;
-
 	int speed = 3;
 
 	TransformComponent() { position.Zero(); }
@@ -40,8 +40,17 @@ struct TransformComponent : public Component {
 	void init() override { velocity.Zero(); }
 
 	void update() override { 
-		position.x += velocity.x * speed;
-		position.y += velocity.y * speed; 
+
+		switch (_worldState) {
+
+		case stateRealTime:
+			position.x += velocity.x * speed;
+			position.y += velocity.y * speed;
+			break;
+
+		case stateTurnBased:
+			speed = 0;
+		}
 	}
 
 };
