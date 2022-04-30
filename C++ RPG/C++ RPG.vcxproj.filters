@@ -369,10 +369,10 @@
     <ClInclude Include="GameEngine\CombatFunctions.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngine\ECS\EnemyBehaviour.h">
-      <Filter>GameEngine\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngine\WorldState.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\EnemyBehaviour.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
   </ItemGroup>

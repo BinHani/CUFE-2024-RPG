@@ -15,9 +15,8 @@ struct StatusComponent : public Component {
 
 	StatusComponent() {}
 
-	StatusComponent(short _maxHP, short _maxAP, short _damage, short _resistance) : 
-		maxHP(_maxHP), maxAP(_maxAP), damage(_damage), baseResistance(_resistance) {
-	}
+	StatusComponent(short _maxHP, short _maxAP, short _damage, short _resistance, short _battleIndex) : 
+		maxHP(_maxHP), maxAP(_maxAP), damage(_damage), baseResistance(_resistance), battleIndex(_battleIndex) {}
 
 	void init() override {
 
@@ -39,4 +38,13 @@ struct StatusComponent : public Component {
 		else { currentResistance = baseResistance; }
 
 	}
+
+	StatusComponent(StatusComponent& _status) {
+
+		maxHP = _status.maxHP;
+		maxAP = _status.maxAP;
+		damage = _status.damage;
+		baseResistance = _status.baseResistance;
+	}
+
 };

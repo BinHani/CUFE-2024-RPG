@@ -244,7 +244,6 @@
     <ClInclude Include="GameEngine\ECS\ColliderComponent.h" />
     <ClInclude Include="GameEngine\ECS\Components.h" />
     <ClInclude Include="GameEngine\ECS\ECS.h" />
-    <ClInclude Include="GameEngine\ECS\EnemyBehaviour.h" />
     <ClInclude Include="GameEngine\ECS\FightNight.h" />
     <ClInclude Include="GameEngine\ECS\KeyboardController.h" />
     <ClInclude Include="GameEngine\ECS\ProjectileComponent.h" />
@@ -253,6 +252,7 @@
     <ClInclude Include="GameEngine\ECS\TileComponent.h" />
     <ClInclude Include="GameEngine\ECS\TransformComponent.h" />
     <ClInclude Include="GameEngine\ECS\UILabel.h" />
+    <ClInclude Include="GameEngine\EnemyBehaviour.h" />
     <ClInclude Include="GameEngine\Game.h" />
     <ClInclude Include="GameEngine\GameObject.h" />
     <ClInclude Include="GameEngine\WorldState.h" />

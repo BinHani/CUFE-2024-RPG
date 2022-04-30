@@ -32,7 +32,7 @@ Vector2D rangerPos;
 const uint8_t* keystates = SDL_GetKeyboardState(NULL);
 Entity* currentEnemies[4];
 bool enemyExists[4];
-StatusComponent* enemyStatus[4];
+StatusComponent enemyStatus[4];
 int enemyCount, currentTurn = 0;
 bool actorsDetermined = false; 
 bool actorsSorted = false;
@@ -100,52 +100,46 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 
 	//Cleric
 	Cleric.addComponent<TransformComponent>(301.0f, 2944.0f, 220, 110, 0.35);
-	Cleric.addComponent<StatusComponent>(30, 50, 15, 40);
+	Cleric.addComponent<StatusComponent>(30, 50, 15, 40, 0);
 	Cleric.addComponent<SpriteComponent>("Cleric", true);
 	Cleric.addComponent<ColliderComponent>("Cleric");
 	Cleric.addComponent<KeyboardController>();
 	Cleric.getComponent<SpriteComponent>().battleIndex = 0;
-	Cleric.getComponent<StatusComponent>().battleIndex = 0;
 	Cleric.addGroup(Game::groupPlayerCharacters);
 
 	//Warrior
 	Warrior.addComponent<TransformComponent>(301.0f, 2998.0f, 184, 109, 0.35);
-	Warrior.addComponent<StatusComponent>(50, 15, 30, 40);
+	Warrior.addComponent<StatusComponent>(50, 15, 30, 40, 1);
 	Warrior.addComponent<SpriteComponent>("Warrior", true);
 	Warrior.addComponent<ColliderComponent>("Warrior");
 	Warrior.addComponent<KeyboardController>();
 	Warrior.addComponent<FightNight>();
 	Warrior.getComponent<SpriteComponent>().battleIndex = 1;
-	Warrior.getComponent<StatusComponent>().battleIndex = 1;
 	Warrior.addGroup(Game::groupPlayerCharacters);
 
 	//Wizard
 	Wizard.addComponent<TransformComponent>(256.0f, 2944.0f, 220, 110, 0.35);
-	Wizard.addComponent<StatusComponent>(30, 35, 45, 40);
+	Wizard.addComponent<StatusComponent>(30, 35, 45, 40, 2);
 	Wizard.addComponent<SpriteComponent>("Wizard", true);
 	Wizard.addComponent<ColliderComponent>("Wizard");
 	Wizard.addComponent<KeyboardController>();
 	Wizard.getComponent<SpriteComponent>().battleIndex = 2;
-	Wizard.getComponent<StatusComponent>().battleIndex = 2;
 	Wizard.addGroup(Game::groupPlayerCharacters);
 
 	//Ranger
 	Ranger.addComponent<TransformComponent>(256.0f, 2989.0f, 220, 110, 0.35);
-	Ranger.addComponent<StatusComponent>(30, 50, 20, 40);
+	Ranger.addComponent<StatusComponent>(30, 50, 20, 40, 3);
 	Ranger.addComponent<SpriteComponent>("Ranger", true);
 	Ranger.addComponent<ColliderComponent>("Ranger");
 	Ranger.addComponent<KeyboardController>();
 	Ranger.getComponent<SpriteComponent>().battleIndex = 3;
-	Ranger.getComponent<StatusComponent>().battleIndex = 3;
 	Ranger.addGroup(Game::groupPlayerCharacters);
 
 	//Spoopy
 	Spoopy.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	Spoopy.addComponent<StatusComponent>(450, 50, 30, 55);
+	Spoopy.addComponent<StatusComponent>(450, 50, 30, 55, 4);
 	Spoopy.addComponent<SpriteComponent>("Spoopy", true);
 	Spoopy.getComponent<SpriteComponent>().battleIndex = 4;
-	Spoopy.getComponent<StatusComponent>().battleIndex = 4;
-	Spoopy.addComponent<EnemyBehaviour>();
 	Spoopy.addGroup(Game::groupEnemyCharacters);
 
 	assets->CreateProjectile(Flameball, Vector2D(600, 640), Vector2D(2, 0), 300, 1, "Flameball");
@@ -305,7 +299,7 @@ void Game::update() {
 						
 						if (enemySelected) {
 
-						if (CombatFunctions::Attack(p, currentEnemies, enemyStatus, enemySelector, enemyCount)) {
+						if (CombatFunctions::Attack(p, enemyStatus, enemySelector, enemyCount)) {
 
 							p->getComponent<SpriteComponent>().attack = true;
 							currentTurn++;
@@ -335,7 +329,7 @@ void Game::update() {
 						break;
 					}
 
-					//std::cout << "currentTurn: " << currentTurn << std::endl;
+					
 					
 				}
 

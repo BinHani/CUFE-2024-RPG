@@ -13,13 +13,14 @@ const uint8_t restRefund = 5;
 
 struct CombatFunctions {
 	static int GenerateRandomEncounter(Manager* man, Entity* enemies[]);
-	static void SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent* _enemyStatus[]);
+	static void SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[]);
 	static SDL_Keycode GetAction(SDL_Event& _event);
 	static SDL_Keycode GetTarget(SDL_Event& _event);
 	static void Command();
-	static bool Attack(Entity* attacker, Entity* defender[], StatusComponent* defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount);
+	static bool Attack(Entity* attacker, StatusComponent defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount);
 	static bool Defend(Entity* actor);
 	static bool Rest(Entity* actor);
+	static unsigned short isOver()
 };
 
 //Randomly generate encounter from pool of enemies
@@ -59,7 +60,7 @@ int CombatFunctions::GenerateRandomEncounter(Manager* man, Entity* enemies[]) {
 	return enemyCount;
 }
 
-void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent* _enemyStatus[]) {
+void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[]) {
 
 	for (int i = 0; i < _enemyCount; i++) {
 		for (int j = 0; j < _enemyCount - (i + 1); j++) {
@@ -72,7 +73,7 @@ void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, Status
 		}
 	}
 
-	for (int i = 0; i < _enemyCount; i++) { _enemyStatus[i] = &enemies[i]->getComponent<StatusComponent>(); }
+	for (int i = 0; i < _enemyCount; i++) { _enemyStatus[i] = enemies[i]->getComponent<StatusComponent>(); }
 }
 
 SDL_Keycode CombatFunctions::GetAction(SDL_Event& _event) {
@@ -112,7 +113,7 @@ void CombatFunctions::Command() {
 	}
 }
 
-bool CombatFunctions::Attack(Entity* attacker, Entity* defender[], StatusComponent* defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount) {
+bool CombatFunctions::Attack(Entity* attacker, StatusComponent defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount) {
 
 	if (attacker->getComponent<StatusComponent>().currentAP >= attackCost) {
 
@@ -120,18 +121,18 @@ bool CombatFunctions::Attack(Entity* attacker, Entity* defender[], StatusCompone
 	
 		case SDLK_1:
 
-			if (defenderStatus[0]->isAlive) { 
+			if (defenderStatus[0].isAlive) { 
 			
-			defender[0]->getComponent<StatusComponent>().currentHP -= attacker->getComponent<StatusComponent>().damage;
-			std::cout << "Enemy 1's HP: "<< defender[0]->getComponent<StatusComponent>().currentHP << std::endl;
+			defenderStatus[0].currentHP -= attacker->getComponent<StatusComponent>().damage;
+			std::cout << "Enemy 1's HP: "<< defenderStatus[0].currentHP << std::endl;
 
 			attacker->getComponent<StatusComponent>().currentAP -= attackCost;
 			std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
 
-			if (defender[0]->getComponent<StatusComponent>().currentHP < 0) { defender[0]->getComponent<StatusComponent>().currentHP = 0; }
+			if (defenderStatus[0].currentHP < 0) { defenderStatus[0].currentHP = 0; }
 
 			return true;
-		}
+			}
 
 			std::cout << "Invalid Target!\n";
 			return false;
@@ -140,22 +141,18 @@ bool CombatFunctions::Attack(Entity* attacker, Entity* defender[], StatusCompone
 
 			if (_enemyCount >= 2) {
 
-			if (defenderStatus[1]->isAlive) {
+				if (defenderStatus[1].isAlive) {
 
-				defender[1]->getComponent<StatusComponent>().currentHP -= attacker->getComponent<StatusComponent>().damage;
-				std::cout << "Enemy 2's HP: " << defender[1]->getComponent<StatusComponent>().currentHP << std::endl;
+					defenderStatus[1].currentHP -= attacker->getComponent<StatusComponent>().damage;
+					std::cout << "Enemy 2's HP: " << defenderStatus[1].currentHP << std::endl;
 
-				attacker->getComponent<StatusComponent>().currentAP -= attackCost;
-				std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
+					attacker->getComponent<StatusComponent>().currentAP -= attackCost;
+					std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
 
-				if (defender[1]->getComponent<StatusComponent>().currentHP < 0) {
+					if (defenderStatus[1].currentHP < 0) { defenderStatus[1].currentHP = 0; }
 
-					defender[1]->getComponent<StatusComponent>().currentHP = 0; 
-
+					return true;
 				}
-
-				return true;
-			}
 
 			}
 
@@ -166,22 +163,18 @@ bool CombatFunctions::Attack(Entity* attacker, Entity* defender[], StatusCompone
 
 			if (_enemyCount >= 3) {
 
-			if (defenderStatus[2]->isAlive) {
+				if (defenderStatus[2].isAlive) {
 
-				defender[2]->getComponent<StatusComponent>().currentHP -= attacker->getComponent<StatusComponent>().damage;
-				std::cout << "Enemy 3's HP: " << defender[2]->getComponent<StatusComponent>().currentHP << std::endl;
+					defenderStatus[2].currentHP -= attacker->getComponent<StatusComponent>().damage;
+					std::cout << "Enemy 3's HP: " << defenderStatus[2].currentHP << std::endl;
 
-				attacker->getComponent<StatusComponent>().currentAP -= attackCost;
-				std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
+					attacker->getComponent<StatusComponent>().currentAP -= attackCost;
+					std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
 
-				if (defender[2]->getComponent<StatusComponent>().currentHP < 0) {
-					
-					defender[2]->getComponent<StatusComponent>().currentHP = 0;
+					if (defenderStatus[2].currentHP < 0) { defenderStatus[2].currentHP = 0; }
 
+					return true;
 				}
-
-				return true;
-			}
 
 			}
 
@@ -192,22 +185,18 @@ bool CombatFunctions::Attack(Entity* attacker, Entity* defender[], StatusCompone
 
 			if (_enemyCount == 4) {
 
-			if (defenderStatus[3]->isAlive) {
+				if (defenderStatus[3].isAlive) {
 
-				defender[3]->getComponent<StatusComponent>().currentHP -= attacker->getComponent<StatusComponent>().damage;
-				std::cout << "Enemy 4's HP: " << defender[2]->getComponent<StatusComponent>().currentHP << std::endl;
+					defenderStatus[3].currentHP -= attacker->getComponent<StatusComponent>().damage;
+					std::cout << "Enemy 4's HP: " << defenderStatus[2].currentHP << std::endl;
 
-				attacker->getComponent<StatusComponent>().currentAP -= attackCost;
-				std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
+					attacker->getComponent<StatusComponent>().currentAP -= attackCost;
+					std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
 
-				if (defender[3]->getComponent<StatusComponent>().currentHP < 0) {
-					
-					defender[3]->getComponent<StatusComponent>().currentHP = 0;
+					if (defenderStatus[3].currentHP < 0) { defenderStatus[3].currentHP = 0; }
 
+					return true;
 				}
-
-				return true;
-			}
 
 			}
 
@@ -253,3 +242,4 @@ bool CombatFunctions::Rest(Entity* actor) {
 	return false;
 
 }
+

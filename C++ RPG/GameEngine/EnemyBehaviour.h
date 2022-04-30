@@ -1,19 +1,19 @@
 #pragma once
-#include "ECS.h"
-#include "Components.h"
+#include "ECS\ECS.h"
+#include "ECS\Components.h"
 #include <random>
 
-class EnemyBehaviour : public Component {
+class EnemyBehaviour {
 
 public:
 
 	StatusComponent* status;
 	float normalizedHP, normalizedAP;
 
-	void init() override {
+	void init() {
 
 		status = &entity->getComponent<StatusComponent>();
-	
+
 		attackWeight = 0;
 		defendWeight = 0;
 		restWeight = 0;
@@ -24,7 +24,7 @@ public:
 	}
 
 	void update() override {
-	
+
 		normalizedHP = static_cast<float>(status->currentHP) / status->maxHP;
 		normalizedAP = static_cast<float>(status->currentAP) / status->maxAP;
 	}
@@ -88,7 +88,7 @@ private:
 
 	}
 
-	decision spoopyAI() {
+	decision AI(unsigned short a, unsigned short d, unsigned short r, unsigned short i) {
 
 		ResetWeights();
 
@@ -96,19 +96,19 @@ private:
 
 		if (normalizedHP >= 0.5) {
 
-			attackWeight += 0.07 * normalizedHP;
-			defendWeight += 0.02 * (1 - normalizedHP);
-			restWeight = 0.01 * (1 - normalizedAP);
-			irrationalWeight += 0.01 * normalizedHP;
-			
+			attackWeight += a * normalizedHP;
+			defendWeight += d * (1 - normalizedHP);
+			restWeight = r * (1 - normalizedAP);
+			irrationalWeight += i * normalizedHP;
+
 		}
 
 		if (normalizedHP < 0.5) {
 
-			attackWeight += 0.03 * normalizedHP;
-			defendWeight += 0.05 * (1 - normalizedHP);
-			restWeight = 0.03 * (1 - normalizedAP);
-			irrationalWeight += 0.04 * (1- normalizedHP);
+			attackWeight += a * normalizedHP;
+			defendWeight += d * (1 - normalizedHP);
+			restWeight = r * (1 - normalizedAP);
+			irrationalWeight += i * (1 - normalizedHP);
 		}
 
 		return getDecision();
@@ -127,7 +127,17 @@ private:
 
 		std::mt19937 RNG(sd);
 
-			double r = mainDist(RNG);
+		double r = mainDist(RNG);
+
+		if (r >= 1 && r < 2) return decision::ATK;
+
+		if (r >= 2 && r < 3) return decision::DEF;
+
+		if (r >= 3 && r < 4) return decision::REST;
+
+		if (r >= 4 && r < 5) { // irrational behaviour
+
+			r = subDist(RNG);
 
 			if (r >= 1 && r < 2) return decision::ATK;
 
@@ -135,17 +145,7 @@ private:
 
 			if (r >= 3 && r < 4) return decision::REST;
 
-			if (r >= 4 && r < 5) { // irrational behaviour
-
-				r = subDist(RNG);
-
-				if (r >= 1 && r < 2) return decision::ATK;
-
-				if (r >= 2 && r < 3) return decision::DEF;
-
-				if (r >= 3 && r < 4) return decision::REST;
-
-			}
+		}
 	}
 
 	void ResetWeights() { attackWeight = defendWeight = restWeight = irrationalWeight = 0; }
