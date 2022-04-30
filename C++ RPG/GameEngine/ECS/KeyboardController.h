@@ -24,9 +24,7 @@ public:
 
 	void update() override {
 
-		switch (_worldState) {
-
-		case stateRealTime:
+		if (_worldState == stateRealTime) {
 
 			if (Game::event.type == SDL_KEYDOWN) {
 
@@ -293,28 +291,6 @@ public:
 						sprite->Play("Idle");
 						sprite->spriteFlip = SDL_FLIP_NONE;
 					}
-					break;
-				}
-			}
-
-			break;
-
-		case stateTurnBased:
-
-			if (Game::event.type == SDL_KEYDOWN) {
-
-				switch (Game::event.key.keysym.sym) {
-
-				case SDLK_j:
-					//attack
-					break;
-
-				case SDLK_k:
-					//defend
-					break;
-
-				case SDLK_l:
-					//rest
 					break;
 				}
 			}

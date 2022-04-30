@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Combat\AI.h" />
     <ClInclude Include="Combat\character.h" />
     <ClInclude Include="Combat\combat.h" />
     <ClInclude Include="Combat\tile.h" />
@@ -238,10 +239,12 @@
     <ClInclude Include="Frameworks\SDL_vulkan.h" />
     <ClInclude Include="GameEngine\AssetManager.h" />
     <ClInclude Include="GameEngine\Collision.h" />
+    <ClInclude Include="GameEngine\CombatFunctions.h" />
     <ClInclude Include="GameEngine\ECS\Animation.h" />
     <ClInclude Include="GameEngine\ECS\ColliderComponent.h" />
     <ClInclude Include="GameEngine\ECS\Components.h" />
     <ClInclude Include="GameEngine\ECS\ECS.h" />
+    <ClInclude Include="GameEngine\ECS\EnemyBehaviour.h" />
     <ClInclude Include="GameEngine\ECS\FightNight.h" />
     <ClInclude Include="GameEngine\ECS\KeyboardController.h" />
     <ClInclude Include="GameEngine\ECS\ProjectileComponent.h" />
@@ -252,6 +255,7 @@
     <ClInclude Include="GameEngine\ECS\UILabel.h" />
     <ClInclude Include="GameEngine\Game.h" />
     <ClInclude Include="GameEngine\GameObject.h" />
+    <ClInclude Include="GameEngine\WorldState.h" />
     <ClInclude Include="GameEngine\Grid.h" />
     <ClInclude Include="GameEngine\Map.h" />
     <ClInclude Include="GameEngine\Pathfinding.h" />
@@ -259,10 +263,10 @@
     <ClInclude Include="GameEngine\Tile.h" />
     <ClInclude Include="GameEngine\Transition.h" />
     <ClInclude Include="GameEngine\Vector2D.h" />
-    <ClInclude Include="GameEngine\WorldState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\cave.map" />
+    <None Include="assets\overworld.map" />
     <None Include="assets\testMap.map" />
     <None Include="assets\testMap2.map" />
     <None Include="Frameworks\SDL_config.h.cmake" />
@@ -304,9 +308,11 @@
     <Image Include="assets\flameball.png" />
     <Image Include="assets\cave.png" />
     <Image Include="assets\Map_tile_123.png" />
+    <Image Include="assets\overworld.png" />
     <Image Include="assets\ranger_spritesheet.png" />
     <Image Include="assets\spoopy_spritesheet.png" />
     <Image Include="assets\underground_battle.png" />
+    <Image Include="assets\wipe.png" />
     <Image Include="assets\wizard_spritesheet.png" />
     <Image Include="D:\Desktop\eyes.png" />
   </ItemGroup>

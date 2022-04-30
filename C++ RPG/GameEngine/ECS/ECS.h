@@ -96,7 +96,7 @@ public:
 	template <typename T> 
 	T& getComponent() const {
 
-		assert(hasComponent <T>());
+		assert(hasComponent<T>());
 
 		auto ptr(componentArray[getComponentTypeID<T>()]);
 		return *static_cast<T*>(ptr);

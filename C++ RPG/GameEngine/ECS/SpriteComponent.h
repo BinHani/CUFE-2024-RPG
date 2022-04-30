@@ -1,30 +1,32 @@
 #pragma once
-#include "Components.h"
 #include "SDL.h"
 #include "..\TextureManager.h"
+#include "Components.h"
 #include "Animation.h"
 #include "..\AssetManager.h"
 #include <map>
 #include <cmath>
-#include <iostream>
 
 class SpriteComponent : public Component {
 
 private:
 
 	TransformComponent* transform;
+	//StatusComponent* status; //causes error
 	SDL_Texture* texture;
 	SDL_Rect srcRect, destRect;
 
 	bool animated = false;
 	int frames = 0;
 	int speed = 50;
-	int x;
 	bool firstHalf;
+	int combatAnimator = 0;
+
 public:
 
 	int animIndex = 0;
-	int battleIndex = 0;  //controls where to be placed in battles
+	int battleIndex;  //controls where to be placed in battles
+	bool attack;
 
 	std::map<const char*, Animation> animations;
 
@@ -42,14 +44,17 @@ public:
 		Animation walkDown = Animation(0, 4, 100);
 		Animation walkLeft = Animation(1, 3, 100);
 		Animation walkUp = Animation(2, 3, 100);
+
 		Animation spoopyFullHealth = Animation(0, 2, 100);
 		Animation spoopyLowHealth = Animation(1, 2, 100);
 
 		animations.emplace("Idle", idle);
 		animations.emplace("WalkDown", walkDown);
 		animations.emplace("WalkLeft", walkLeft);
-		animations.emplace("WalkUp", spoopyFullHealth);
-		animations.emplace("WalkUp", spoopyLowHealth);
+		animations.emplace("WalkUp", walkUp);
+
+		animations.emplace("SpoopyFull", spoopyFullHealth);
+		animations.emplace("SpoopyWeak", spoopyLowHealth);
 
 		Play("Idle");
 
@@ -63,12 +68,13 @@ public:
 	void init() override {
 
 		transform = &entity->getComponent<TransformComponent>();
+		//status = &entity->getComponent<StatusComponent>();
 
 		srcRect.x = srcRect.y = 0;
 		srcRect.w = transform->width;
 		srcRect.h = transform->height;
 
-		x = 40;
+		attack = false;
 		firstHalf = true;
 	}
 
@@ -108,8 +114,9 @@ public:
 				destRect.w = transform->width;
 				destRect.h = transform->height;
 
-				destRect.x = 360;
-				destRect.y = 550;
+				destRect.x = 290;
+				if (!attack) { destRect.y = 550; }
+				else AnimateAttack(combatAnimator);
 				break;
 
 			case 1:
@@ -123,8 +130,9 @@ public:
 				destRect.w = transform->width;
 				destRect.h = transform->height;
 
-				destRect.x = 560;
-				destRect.y = 570;
+				destRect.x = 490;
+				if (!attack) { destRect.y = 570; }
+				else AnimateAttack(combatAnimator);
 				break;
 
 			case 2:
@@ -136,41 +144,50 @@ public:
 				destRect.w = transform->width;
 				destRect.h = transform->height;
 
-				destRect.x = 760;
-				destRect.y = 550;
+				destRect.x = 690;
+				if (!attack) { destRect.y = 550; }
+				else AnimateAttack(combatAnimator);
 				break;
 
 			case 3:
-				//reserved
+				speed = 600;
+				frames = 4;
+				animIndex = 2;
+
+				srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+				srcRect.y = animIndex * transform->height;
+
+				destRect.w = transform->width;
+				destRect.h = transform->height;
+
+				destRect.x = 890;
+
+				if (!attack) { destRect.y = 550; }
+				else AnimateAttack(combatAnimator);
 				break;
 
 			case 4: 
 				speed = 800;
 				frames = 2;
-				animIndex = 0;
+				//if (status->currentHP > status->maxHP / 2) 
+				{ animIndex = 0; }
+				//else { animIndex = 1; }
 
 				srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
 				srcRect.y = animIndex * transform->height;
 
 				destRect.w = transform->width * 0.75;
 				destRect.h = transform->height * 0.75;
-				
-				if (x >= 40 && x < 840 && firstHalf) {
 
-					destRect.x = x += 4;
-					destRect.y = round(20 + 0.2 * sqrt((840 - x) * (x - 40)));
-					if (x == 840) { firstHalf = false; }
-					std::cout << destRect.x << std::endl;
-				
-				}
+				if (destRect.x < 40 || destRect.x > 840) { destRect.x = 40; }
 
-				if (x > 40 && x <= 840 && !firstHalf) {
+				//Trace the Ellipse: (x-440) ^ 2 / 400 ^ 2 + (y - 20) ^ 2 / 80 ^ 2 = 1
 
-					destRect.x = x -= 4;
-					destRect.y = round(20 - 0.2 * sqrt((840 - x) * (x - 40)));
-					if (x == 40) { firstHalf = true; }
-					std::cout << destRect.x << std::endl;
-				}
+				//if (status->currentHP > status->maxHP / 2) {
+				Ellipse();
+			//	}
+
+			//	else if (status->currentHP <= status->maxHP / 2) { LemniscateOfGerono(); }
 
 				break;
 			}
@@ -188,4 +205,51 @@ public:
 		speed = animations[animName].speed;
 	}
 
+	inline void LemniscateOfGerono() {
+
+		if (destRect.x >= 40 && destRect.x < 840 && firstHalf) {
+
+			destRect.x += 4;
+			destRect.y = round(20 + 0.00125 * (destRect.x - 440) * sqrt((840 - destRect.x) * (destRect.x - 40)));
+			if (destRect.x == 840) { firstHalf = false; }
+
+		}
+
+		if (destRect.x > 40 && destRect.x <= 840 && !firstHalf) {
+
+			destRect.x -= 4;
+			destRect.y = round(20 - 0.00125 * (destRect.x - 440) * sqrt((840 - destRect.x) * (destRect.x - 40)));
+			if (destRect.x == 40) { firstHalf = true; }
+		}
+
+	}
+
+	inline void Ellipse() {
+
+		if (destRect.x >= 40 && destRect.x < 840 && firstHalf) {
+
+			destRect.x += 4;
+			destRect.y = round(20 + 0.2 * sqrt((840 - destRect.x) * (destRect.x - 40)));
+			if (destRect.x == 840) { firstHalf = false; }
+
+		}
+
+		if (destRect.x > 40 && destRect.x <= 840 && !firstHalf) {
+
+			destRect.x -= 4;
+			destRect.y = round(20 - 0.2 * sqrt((840 - destRect.x) * (destRect.x - 40)));
+			if (destRect.x == 40) { firstHalf = true; }
+		}
+
+	}
+
+	inline void AnimateAttack(int &combatAnimator) {
+
+		if (attack) {
+
+			if (combatAnimator < 5) { destRect.y -= 10; combatAnimator++; }
+			else if (combatAnimator < 10) { destRect.y -= 10; combatAnimator++; }
+			else { attack = false; combatAnimator = 0; }
+		}
+	}
 };

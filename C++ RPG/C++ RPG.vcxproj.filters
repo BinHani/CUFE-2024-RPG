@@ -357,14 +357,23 @@
     <ClInclude Include="GameEngine\Transition.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngine\WorldState.h">
-      <Filter>GameEngine</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngine\ECS\FightNight.h">
       <Filter>GameEngine\ECS</Filter>
     </ClInclude>
     <ClInclude Include="Combat\tile.h">
       <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="Combat\AI.h">
+      <Filter>Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\CombatFunctions.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\ECS\EnemyBehaviour.h">
+      <Filter>GameEngine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\WorldState.h">
+      <Filter>GameEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -392,6 +401,9 @@
       <Filter>assets</Filter>
     </None>
     <None Include="assets\cave.map">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="assets\overworld.map">
       <Filter>assets</Filter>
     </None>
   </ItemGroup>
@@ -463,6 +475,12 @@
       <Filter>assets</Filter>
     </Image>
     <Image Include="assets\spoopy_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\overworld.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\wipe.png">
       <Filter>assets</Filter>
     </Image>
   </ItemGroup>

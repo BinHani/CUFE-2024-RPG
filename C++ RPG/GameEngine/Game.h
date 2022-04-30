@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Transition.h"
+#include "ECS\ECS.h"
 #include <iostream>
 #include <vector>
 
@@ -39,6 +40,5 @@ public:
 	};
 
 private:
-	int cnt = 0;
 	SDL_Window* window;
 };

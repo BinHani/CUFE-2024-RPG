@@ -18,9 +18,10 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 
 	MapSize.x = scaledSize * sizeX;
 	MapSize.y = scaledSize * sizeY;
-
+	ColliderComponent* lastCol = nullptr;
 	char tile[3];
 	char col;
+	char oldCol = '0';
 	std::fstream mapFile;
 	mapFile.open(path);
 
@@ -31,8 +32,8 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 
 			for (int i = 0; i < 3; i++) { mapFile.get(tile[i]); }
 
-			srcY = atoi(tile) / 8 * tileSize;
-			srcX = atoi(tile) % 8 * tileSize;
+			srcY = atoi(tile) / 14 * tileSize;
+			srcX = atoi(tile) % 14 * tileSize;
 
 			AddTile(srcX, srcY, x * scaledSize, y * scaledSize);
 
@@ -50,11 +51,25 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 				mapFile.get(col);
 
 				if (col == '1') {
-
 					auto& tcol(manager.addEntity());
 					tcol.addComponent<ColliderComponent>("terrain", x * scaledSize, y * scaledSize, 0.5 * scaledSize);
 					tcol.addGroup(Game::groupColliders);
 				}
+
+				else if (col == '2') {
+
+					if (oldCol == '2') { lastCol->collider.w += lastCol->collider.w; }
+
+					else {
+						std::cout << "Door Created! ";
+						auto& dcol(manager.addEntity());
+						dcol.addComponent<ColliderComponent>("door", x * scaledSize, y * scaledSize, 0.5 * scaledSize);
+						dcol.addGroup(Game::groupDoors);
+						lastCol = &dcol.getComponent<ColliderComponent>();
+					}
+				}
+
+				oldCol = col;
 
 			mapFile.ignore();
 		}

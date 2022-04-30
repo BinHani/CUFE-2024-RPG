@@ -1,9 +1,9 @@
 #pragma once
-enum worldState : short {
+enum class worldState {
 
 	stateRealTime,
 	stateTurnBased,
 	stateGameOver,
 };
 
-extern short _worldState;
+worldState _worldState;

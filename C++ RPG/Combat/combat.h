@@ -7,83 +7,87 @@
 #include  <stdio.h>
 #include  <time.h>
 #include "character.h"
-#include "tile.h"
 
-#define N 	  6 // max no. of combatants
-#define ATK   1
-#define DEF   2
-#define REST  3
+#define N 	  8 // max no. of combatants
+
+enum decision { ATK, DEF, REST };
+enum attacks { REG, MOD, STR };
+
+// TODO: Hit % / Evasion mechanic, AI integration, add comments, and general cleanliness
 
 class combat
 {
 private:
 	uint8_t counter; // turn counter that indicates the combatant in this turn
-
+	struct tile // fundamental combat unit
+	{
+		character combatant; // character standing on the tile
+		bool is_enemy; // tile allegiance (i.e., 0 for friendly or 1 for enemy)
+		bool* alive; // tile state (i.e., 0 for dead or 1 for alive)
+		uint8_t atk_pwr; // tile attack power
+		uint8_t def; // tile defense rating
+		tile() {};
+	};
 	tile combatants[N];
-	tile friendly[N/2];
-	tile enemy[N/2];
+	friend class AI;
 public:
-	combat(character&, character&, character&, character&, character&, character&); // combat init function; heart of the combat loop
+	combat(character&, character&, character&, character&, character&, character&, character&, character&); // combat init function; heart of the combat loop
 	~combat(); // combat end function 
-	void assemble(character&, character&, character&, character&, character&, character&); // utility function to assemble all combatants in an array
+	void assemble(character&, character&, character&, character&, character&, character&, character&, character&); // utility function to assemble all combatants in an array
 	void sort(tile[]); // utility function to sort all combatants in descending order according to stamina
-	void death(tile&, tile*); // utility function handling character death
+	void death(tile*, tile*); // utility function handling character death
 	void next_turn(); // utility function to advance to the next turn
-	void attack(tile&, tile&, short); // function handling attacking
-	void defend(tile&); // function handling defense
-	void rest(tile&); // function to advance the turn and do nothing
+	void attack(tile*, tile*, uint8_t); // function handling attacking
+	void defend(tile*); // function handling defense
+	void rest(tile*); // function to advance the turn and recover AP
 };
 
-void combat::assemble(character& first, character& second, character& third, character& fourth, character& fifth, character& sixth)
+void combat::assemble(character& first, character& second, character& third, character& fourth, character& fifth, character& sixth, character& seventh, character& eighth)
 {
 	// this smells, definitely needs changing. possibly replace by a constructor for tile?
 	tile characters[N];
 	characters[0].combatant = first; characters[0].alive = new bool; *characters[0].alive = 1; characters[0].is_enemy = 0; characters[0].atk_pwr = 1; characters[0].def = 1;
 	characters[1].combatant = second; characters[1].alive = new bool; *characters[1].alive = 1; characters[1].is_enemy = 0; characters[1].atk_pwr = 1; characters[1].def = 1;
 	characters[2].combatant = third; characters[2].alive = new bool; *characters[2].alive = 1; characters[2].is_enemy = 0; characters[2].atk_pwr = 1; characters[2].def = 1;
-	characters[3].combatant = fourth; characters[3].alive = new bool; *characters[3].alive = 1; characters[3].is_enemy = 1; characters[3].atk_pwr = 1; characters[3].def = 1;
+	characters[3].combatant = fourth; characters[3].alive = new bool; *characters[3].alive = 1; characters[3].is_enemy = 0; characters[3].atk_pwr = 1; characters[3].def = 1;
 	characters[4].combatant = fifth; characters[4].alive = new bool; *characters[4].alive = 1; characters[4].is_enemy = 1; characters[4].atk_pwr = 1; characters[4].def = 1;
 	characters[5].combatant = sixth; characters[5].alive = new bool; *characters[5].alive = 1; characters[5].is_enemy = 1; characters[5].atk_pwr = 1; characters[5].def = 1;
+	characters[6].combatant = seventh; characters[6].alive = new bool; *characters[6].alive = 1; characters[6].is_enemy = 1; characters[6].atk_pwr = 1; characters[6].def = 1;
+	characters[7].combatant = eighth; characters[7].alive = new bool; *characters[7].alive = 1; characters[7].is_enemy = 1; characters[7].atk_pwr = 1; characters[7].def = 1;
 
 	for (size_t i = 0; i < N; i++)
 	{
 		combatants[i] = characters[i];
 	}
-	
-	for (size_t i = 0; i < N/2; i++)
-	{
-		friendly[i] = characters[i];
-	}
-	
-	for (size_t i = 0; i < N/2; i++)
-	{
-		enemy[i] = characters[i+3];
-	}
-	
 }
 
-//needs fixing
-void combat::sort(tile characters[])
+void combat::sort(tile characters[]) // sorting implemented using the selection sort algorithm as the sample size is low
 {
-	for (size_t i = 0; i < N - 1; i++)
+	uint8_t i, j, min;
+	tile temp;
+	for (i = 0; i < N - 1; i++)
 	{
-		if (characters[i].combatant.FP <= characters[i+1].combatant.FP)
+		min = i;
+		for (j = i + 1; j < N; j++)
 		{
-			tile temp = characters[i+1];
-			characters[i+1] = characters[i];
-			characters[i] = temp;
+			if (characters[j].combatant.AP <= characters[min].combatant.AP)
+			{
+				min = j;
+			}
+			temp = characters[i];
+			characters[i] = characters[min];
+			characters[min] = temp;
 		}
-		
 	}
-	
+
 }
 
-void combat::death(tile& attacker, tile* target)
+void combat::death(tile* attacker, tile* target)
 {
-	if (target->combatant.HP <=0)
+	if (target->combatant.HP <= 0)
 	{
-		*target->alive = 0;
-		std::cout << target->combatant.name << " was killed by " << attacker.combatant.name << std::endl;
+		*target->alive = false;
+		std::cout << target->combatant.name << " was killed by " << attacker->combatant.name << std::endl;
 	}
 }
 
@@ -96,15 +100,62 @@ void combat::next_turn()
 	} while (!*combatants[counter].alive);
 }
 
-void combat::attack(tile& attacker, tile& target, short attack_type)
+void combat::attack(tile* attacker, tile* target, uint8_t attack_type)
 {
-	if (*attacker.alive && *target.alive)
+	if (attacker->alive && target->alive)
 	{
-		// float hit_percentage = 0.5; + switch statement for attack_type modifiers
-		target.combatant.HP -= (attacker.atk_pwr * attacker.combatant.DAMAGE);
-		std::cout << attacker.combatant.name << " hit " << target.combatant.name << " for " << (attacker.atk_pwr * attacker.combatant.DAMAGE) << "HP\n";
-		std::cout << target.combatant.name << "'s current HP: " << target.combatant.HP << "\n";
-		death(attacker, &target);
+		float attack_modifier;
+		switch (attack_type)
+		{
+		case REG:
+			attack_modifier = 1;
+			attacker->combatant.AP -= 2;
+			target->combatant.HP -= (attack_modifier * attacker->atk_pwr * attacker->combatant.DAMAGE);
+			std::cout << attacker->combatant.name << " attacked " << target->combatant.name << " for " << (attack_modifier * attacker->atk_pwr * attacker->combatant.DAMAGE) << "HP\n";
+			std::cout << target->combatant.name << "'s current HP: " << target->combatant.HP << "\n";
+			death(attacker, target);
+			next_turn();
+			break;
+
+		case MOD:
+			attack_modifier = 1.2;
+			attacker->combatant.AP -= 4;
+			target->combatant.HP -= (attack_modifier * attacker->atk_pwr * attacker->combatant.DAMAGE);
+			std::cout << attacker->combatant.name << " moderately attacked " << target->combatant.name << " for " << (attack_modifier * attacker->atk_pwr * attacker->combatant.DAMAGE) << "HP\n";
+			std::cout << target->combatant.name << "'s current HP: " << target->combatant.HP << "\n";
+			death(attacker, target);
+			next_turn();
+			break;
+
+		case STR:
+			attack_modifier = 1.5;
+			attacker->combatant.AP -= 6;
+			target->combatant.HP -= (attack_modifier * attacker->atk_pwr * attacker->combatant.DAMAGE);
+			std::cout << attacker->combatant.name << " strongly attacked " << target->combatant.name << " for " << (attack_modifier * attacker->atk_pwr * attacker->combatant.DAMAGE) << "HP\n";
+			std::cout << target->combatant.name << "'s current HP: " << target->combatant.HP << "\n";
+			death(attacker, target);
+			next_turn();
+			break;
+
+		default:
+			break;
+		}
+		// float hit_percentage = 0.5; 
+	}
+	else
+	{
+		next_turn();
+		return;
+	}
+}
+
+void combat::defend(tile* current)
+{
+	if (*current->alive)
+	{
+		current->combatant.AP -= 1;
+		current->def *= 1.2;
+		std::cout << current->combatant.name << " defended\n" << current->combatant.name << "'s current HP: " << current->combatant.HP << " | " << current->combatant.name << "'s current AP: " << current->combatant.AP << "\n";
 		next_turn();
 	}
 	else
@@ -114,12 +165,12 @@ void combat::attack(tile& attacker, tile& target, short attack_type)
 	}
 }
 
-void combat::defend(tile& current)
+void combat::rest(tile* current)
 {
-	if (*current.alive)
+	if (*current->alive)
 	{
-		current.def *= 1.2;
-		std::cout << current.combatant.name << " defended\n" << current.combatant.name << "'s current HP: " << current.combatant.HP << " | " << current.combatant.name << "'s current FP: " << current.combatant.FP << "\n";
+		current->combatant.AP += 1;
+		std::cout << current->combatant.name << " rested\n" << current->combatant.name << "'s current HP: " << current->combatant.HP << " | " << current->combatant.name << "'s current AP: " << current->combatant.AP << "\n";
 		next_turn();
 	}
 	else
@@ -129,23 +180,9 @@ void combat::defend(tile& current)
 	}
 }
 
-void combat::rest(tile& current)
+combat::combat(character& first, character& second, character& third, character& fourth, character& fifth, character& sixth, character& seventh, character& eigth)
 {
-	if (*current.alive)
-	{
-		std::cout << current.combatant.name << " did nothing\n" << current.combatant.name << "'s current HP: " << current.combatant.HP << " | " << current.combatant.name << "'s current FP: " << current.combatant.FP << "\n";
-		next_turn();
-	}
-	else
-	{
-		next_turn();
-		return;
-	}
-}
-
-combat::combat(character& first, character& second, character& third, character& fourth, character& fifth, character& sixth) 
-{
-	assemble(first, second, third, fourth, fifth, sixth);
+	assemble(first, second, third, fourth, fifth, sixth, seventh, eigth);
 	sort(combatants);
 	counter = 0;
 	std::srand(static_cast<unsigned int>(time(NULL)));
@@ -153,32 +190,34 @@ combat::combat(character& first, character& second, character& third, character&
 	short edeath = 0;
 	while (1)
 	{
-		short fselection = 0;
-		short eselection = 0;
-		short target = 0;
-		short target2 = 0;
-		if (combatants[counter].is_enemy == 0)
+		uint8_t fselection = 0;
+		uint8_t eselection = 0;
+		uint8_t target = 0;
+		uint8_t target2 = 0;
+		uint8_t a_type;
+		if (!combatants[counter].is_enemy)
 		{
-			fselection = rand() % 3 + 1;
+			fselection = rand() % 3;
 			switch (fselection)
 			{
-			case 1:
-				target = rand() % 3;
-				while (!*enemy[target].alive)
+			case ATK:
+				target = rand() % N;
+				a_type = rand() % 3;
+				while (!*combatants[target].alive || !combatants[target].is_enemy)
 				{
-					target = rand() % 3;
+					target = rand() % N;
 				}
-				attack(combatants[counter], enemy[target], 1);
-				if (!*enemy[target].alive)
+				attack(&combatants[counter], &combatants[target], a_type);
+				if (!*combatants[target].alive)
 				{
 					edeath++;
 				}
 				break;
-			case 2:
-				defend(combatants[counter]);
+			case DEF:
+				defend(&combatants[counter]);
 				break;
-			case 3:
-				rest(combatants[counter]);
+			case REST:
+				rest(&combatants[counter]);
 				break;
 			default:
 				break;
@@ -186,44 +225,37 @@ combat::combat(character& first, character& second, character& third, character&
 		}
 		else
 		{
-			eselection = rand() % 3 + 1;
+			eselection = rand() % 3;
 			switch (eselection)
 			{
-			case 1:
-				target2 = rand() % 3;
-				while (!*friendly[target2].alive)
+			case ATK:
+				target2 = rand() % N;
+				while (!*combatants[target2].alive || combatants[target2].is_enemy)
 				{
-					target2 = rand() % 3;
+					target2 = rand() % N;
 				}
-				attack(combatants[counter], friendly[target2], 1);
-				if (!*friendly[target2].alive)
+				attack(&combatants[counter], &combatants[target2], 1);
+				if (!*combatants[target2].alive)
 				{
 					fdeath++;
 				}
 				break;
-			case 2:
-				defend(combatants[counter]);
+			case DEF:
+				defend(&combatants[counter]);
 				break;
-			case 3:
-				rest(combatants[counter]);
+			case REST:
+				rest(&combatants[counter]);
 				break;
 			default:
 				break;
 			}
 		}
-		if (fdeath == 3 || edeath == 3)
+		if (fdeath == N / 2 || edeath == N / 2)
 		{
 			std::cout << "Combat ends.\n";
 			break;
 		}
-		/*while (!*combatants[counter].alive)
-				{
-					counter++;
-					counter %= N;
-				}
-		counter %= N;*/
 	}
-	
 }
 
 combat::~combat()

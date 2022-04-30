@@ -1,29 +1,42 @@
 #pragma once
-#include "Components.h"
-#include <iostream>
+#include "ECS.h"
+#include <cmath>;
 
-class StatusComponent : public Component {
+struct StatusComponent : public Component {
 
-public:
-	TransformComponent* transform;
-	short HP;
-	Vector2D oldPos;
-	uint16_t AP, DAMAGE, RESISTANCE, stepCounter = 0;
+	short maxHP, currentHP;
+	short maxAP, currentAP; 
+	short damage; 
+	short baseResistance, currentResistance;
+	short battleIndex;
+
+	bool isAlive;
+	bool isDefending;
 
 	StatusComponent() {}
 
-	StatusComponent(short hp, short ap, short damage, short resistance) : HP(hp), AP(ap), DAMAGE(damage), RESISTANCE(resistance) {}
+	StatusComponent(short _maxHP, short _maxAP, short _damage, short _resistance) : 
+		maxHP(_maxHP), maxAP(_maxAP), damage(_damage), baseResistance(_resistance) {
+	}
 
 	void init() override {
 
-
-
+		currentHP = maxHP;
+		currentAP = maxAP;
+		currentResistance = baseResistance;
+		isAlive = true;
+		isDefending = false;
 	}
 
 	void update() override {
 
+		if (currentHP <= 0) { currentHP = 0; isAlive = false; }
 
+		if (isDefending) {
+			currentResistance = round(7 * baseResistance / 5);
+		}
+
+		else { currentResistance = baseResistance; }
 
 	}
-
 };

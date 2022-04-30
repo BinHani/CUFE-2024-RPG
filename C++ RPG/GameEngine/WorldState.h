@@ -1,6 +1,6 @@
 #pragma once
 
-enum worldState : short {
+enum worldState : short{
 
 	stateRealTime,
 	stateTurnBased,
