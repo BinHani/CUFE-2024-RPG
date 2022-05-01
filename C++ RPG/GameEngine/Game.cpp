@@ -290,7 +290,7 @@ void Game::update() {
 
 		for (auto& p : players) {
 
-			//Make each player attack once per turn make and sure enemies don't attack themselves
+			//Make each player attack once per turn
 			
 			if (p->getComponent<StatusComponent>().isAlive && currentTurn == p->getComponent<StatusComponent>().battleIndex) {
 

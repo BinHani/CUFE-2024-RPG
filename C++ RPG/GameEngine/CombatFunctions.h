@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include "Game.h"
 #include "ECS\Components.h"
+#include "EnemyBehaviour.h"
 #include <iostream>
 #include <random>
 #include <vector>
@@ -13,7 +14,7 @@ const uint8_t restRefund = 5;
 
 struct CombatFunctions {
 	static int GenerateRandomEncounter(Manager* man, Entity* enemies[]);
-	static void SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[]);
+	static void SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[], EnemyBehaviour _behaviour[]);
 	static SDL_Keycode GetAction(SDL_Event& _event);
 	static SDL_Keycode GetTarget(SDL_Event& _event);
 	static void Command();
@@ -60,7 +61,7 @@ int CombatFunctions::GenerateRandomEncounter(Manager* man, Entity* enemies[]) {
 	return enemyCount;
 }
 
-void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[]) {
+void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[], EnemyBehaviour _behaviour[]) {
 
 	for (int i = 0; i < _enemyCount; i++) {
 		for (int j = 0; j < _enemyCount - (i + 1); j++) {
@@ -74,6 +75,8 @@ void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, Status
 	}
 
 	for (int i = 0; i < _enemyCount; i++) { _enemyStatus[i] = enemies[i]->getComponent<StatusComponent>(); }
+
+	for (int i = 0; i < enemyCount; i++) { _behaviour[i].setStatus(&_enemyStatus[i]); }
 }
 
 SDL_Keycode CombatFunctions::GetAction(SDL_Event& _event) {
