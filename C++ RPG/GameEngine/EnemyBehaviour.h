@@ -26,6 +26,10 @@ public:
 		defendCoeff = _status->defendCoeff;
 		restCoeff = _status->restCoeff;
 		irrationalCoeff = _status->irrationalCoeff;
+		strongestWeight = _status->strongestWeight;
+		tankiestWeight = _status->tankiestWeight;
+		weakestWeight = _status->weakestWeight;
+		randomWeight = _status->randomWeight;
 	}
 
 	StatusComponent* GetStrongest(StatusComponent _playerStatus[]) {
@@ -68,38 +72,45 @@ public:
 	
 	decision DecisionMaker() {
 
-		GetDecisionCoeffs();
+		SetNormalizedStats();
 
-		if (static_cast<double>(status->currentAP) / status->maxAP <= 0.15) { return decision::REST; }
+		if (normalizedAP <= 0.15) { return decision::REST; }
 
-		if (static_cast<double>(status->currentHP) / status->maxHP >= 0.5) {
+		if (normalizedHP >= 0.5) {
 
-			attackWeight += attackCoeff * normalizedHP;
-			defendWeight += defendCoeff * (1 - normalizedHP);
+			attackWeight = attackCoeff * normalizedHP;
+			defendWeight = defendCoeff * (1 - normalizedHP);
 			restWeight = restCoeff * (1 - normalizedAP);
-			irrationalWeight += irrationalCoeff * normalizedHP;
+			irrationalWeight = irrationalCoeff * normalizedHP;
 
 		}
 
 		if (normalizedHP < 0.5) {
 
-			attackWeight += attackCoeff * normalizedHP;
-			defendWeight += defendCoeff * (1 - normalizedHP);
+			attackWeight = attackCoeff * normalizedHP;
+			defendWeight = defendCoeff * (1 - normalizedHP);
 			restWeight = restCoeff * (1 - normalizedAP);
-			irrationalWeight += irrationalCoeff * (1 - normalizedHP);
+			irrationalWeight = irrationalCoeff * (1 - normalizedHP);
 		}
 
-		return GetDecision();
+		std::cout << "===========AI INFO===========" << std::endl;
+		std::cout << "AttackWeight: " << attackWeight << std::endl;
+		std::cout << "DefendWeight: " << defendWeight << std::endl;
+		std::cout << "RestWeight: " << restWeight << std::endl;
+		std::cout << "IrrationalWeight: " << irrationalWeight << std::endl << std::endl;
 
+		decision _decision = GetDecision();
+
+		return _decision;
 	}
 
 	target TargetChooser(StatusComponent _playerStatus[]) {
 
-		GetTargetWeights();
-
 		StatusComponent* weakest = GetWeakest(_playerStatus);
 		StatusComponent* strongest = GetStrongest(_playerStatus);
 		StatusComponent* tankiest = GetTankiest(_playerStatus);
+
+		ResetTargetWeights();
 
 		if (static_cast<double>(strongest->currentHP) / strongest->maxHP <= 0.65) {
 			
@@ -198,15 +209,7 @@ private:
 		}
 	}
 
-	void GetDecisionCoeffs() { 
-		
-		attackCoeff = status->attackCoeff;
-		defendCoeff = status->defendCoeff;
-		restCoeff = status->restCoeff;
-		irrationalCoeff = status->irrationalCoeff;
-	}
-
-	void GetTargetWeights() {
+	void ResetTargetWeights() {
 
 		strongestWeight = status->strongestWeight;
 		tankiestWeight = status->tankiestWeight;
@@ -214,7 +217,10 @@ private:
 		randomWeight = status->randomWeight;
 	}
 
-	void ResetDecisionWeights() { attackWeight = defendWeight = restWeight = irrationalWeight = 0; }
+	void SetNormalizedStats() {
 
-	void ResetTargetWeights() { strongestWeight = tankiestWeight = weakestWeight = randomWeight = 0; }
+		normalizedHP = static_cast<double>(status->currentHP) / status->maxHP;
+		normalizedAP = static_cast<double>(status->currentAP) / status->maxAP;
+	}
+
 };

@@ -44,11 +44,14 @@ struct TransformComponent : public Component {
 		switch (_worldState) {
 
 		case stateRealTime:
+
+			speed = 3;
 			position.x += velocity.x * speed;
 			position.y += velocity.y * speed;
 			break;
 
 		case stateTurnBased:
+			
 			speed = 0;
 		}
 	}

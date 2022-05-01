@@ -381,10 +381,20 @@ void Game::update() {
 
 		if (currentTurn == 4 + enemyCount) { currentTurn = 0; }
 
-		if (lossCheck && isBattleLost(playerStatus)) { _worldState = stateGameOver; std::cout << "World State: " << _worldState << std::endl; }
+		if (lossCheck && isBattleLost(playerStatus)) { 
+			
+			_worldState = stateGameOver;
+			fightInitialized = false;
+		}
+
 		lossCheck = false;
 
-		if (winCheck && isBattleWon(enemyStatus, enemyCount)) { _worldState = stateRealTime; std::cout << "World State: " << _worldState << std::endl; }
+		if (winCheck && isBattleWon(enemyStatus, enemyCount)) { 
+			
+			_worldState = stateRealTime;
+			fightInitialized = false;
+		}
+
 		winCheck = false;
 
 		break; //end of turn based game loop
@@ -410,8 +420,6 @@ void Game::render() {
 		
 	case stateRealTime:
 
-		std::cout << "Rendering Real Time!" << std::endl;
-
 		for (auto& t : tiles) { t->draw(); }
 		for (auto& c : colliders) { c->draw(); }
 		for (auto& p : players) { p->draw(); }
@@ -429,8 +437,10 @@ void Game::render() {
 			if (blinds->isComplete()) { 
 				SDL_RenderCopy(renderer, assets->GetTexture("Background"), NULL, NULL);
 				for (auto& p : players) { p->draw(); }
-				for (int e = 0; e < enemyCount; e++) 
-				{ currentEnemies[e]->draw(); }
+				for (int e = 0; e < enemyCount; e++) {
+
+					if (enemyStatus[e].isAlive) { currentEnemies[e]->draw(); }
+				}
 			}
 
 		break;

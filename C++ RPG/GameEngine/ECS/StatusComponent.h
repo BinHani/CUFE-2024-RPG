@@ -32,8 +32,6 @@ struct StatusComponent : public Component {
 
 	void update() override {
 
-		if (currentHP <= 0) { currentHP = 0; isAlive = false; }
-
 		if (isDefending) {
 			currentResistance = round(7 * baseResistance / 5);
 		}

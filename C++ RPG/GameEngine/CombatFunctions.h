@@ -255,7 +255,14 @@ bool CombatFunctions::Rest(StatusComponent* actor) {
 
 		actor->currentAP += restRefund;
 
-		std::cout << "AP partially restored!" << std::endl << std::endl;
+		if (actor->currentAP >= actor->maxAP) {
+
+			actor->currentAP = actor->maxAP;
+			std::cout << "AP fully restored!" << std::endl << std::endl;
+		}
+
+		else { std::cout << "AP partially restored!" << std::endl << std::endl; }
+
 		return true;
 
 	}
@@ -267,7 +274,7 @@ bool CombatFunctions::Rest(StatusComponent* actor) {
 
 bool CombatFunctions::EnemyAttack(StatusComponent* attacker, StatusComponent* defender, bool& _lossCheck) {
 
-	if (attacker->currentAP < attackCost) {
+	if (attacker->currentAP > attackCost) {
 
 		defender->currentHP -= attacker->damage;
 		attacker->currentAP -= attackCost;
@@ -284,7 +291,7 @@ bool CombatFunctions::EnemyAttack(StatusComponent* attacker, StatusComponent* de
 		return true;
 	}
 
-	std::cout << "Not Enough AP!" << std::endl << std::endl;
+	std::cout << "Attack attempt failed!" << std::endl << std::endl;
 
 	return false;
 
