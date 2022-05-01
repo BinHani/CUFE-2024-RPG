@@ -61,7 +61,6 @@ void Map::LoadMap(std::string path, int sizeX, int sizeY) {
 					if (oldCol == '2') { lastCol->collider.w += lastCol->collider.w; }
 
 					else {
-						std::cout << "Door Created! ";
 						auto& dcol(manager.addEntity());
 						dcol.addComponent<ColliderComponent>("door", x * scaledSize, y * scaledSize, 0.5 * scaledSize);
 						dcol.addGroup(Game::groupDoors);

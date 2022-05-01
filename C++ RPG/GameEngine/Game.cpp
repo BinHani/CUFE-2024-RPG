@@ -34,30 +34,30 @@ const uint8_t* keystates = SDL_GetKeyboardState(NULL);
 Entity* currentEnemies[4];
 bool enemyExists[4];
 StatusComponent enemyStatus[4];
-EnemyBehaviour behaviour[];
+StatusComponent playerStatus[4];
+EnemyBehaviour behaviour[4];
 int enemyCount, currentTurn = 0;
-bool actorsDetermined = false; 
-bool actorsSorted = false;
+bool fightInitialized = false;
 SDL_Keycode actionType = SDLK_UNKNOWN;
 bool actionQueued = false;
 SDL_Keycode enemySelector = SDLK_UNKNOWN;
 bool enemySelected = false;
+bool lossCheck = false;
+bool winCheck = false;
 SDL_Color white = { 0xFF,0xFF,0xFF,0xFF };
 
 //Entity-Group creation
 auto& Cleric(manager.addEntity());
-auto& Wizard(manager.addEntity());
 auto& Warrior(manager.addEntity());
+auto& Wizard(manager.addEntity());
 auto& Ranger(manager.addEntity());
 auto& Spoopy(manager.addEntity());
-auto& Flameball(manager.addEntity());
 auto& label(manager.addEntity());
 
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayerCharacters));
 auto& enemies(manager.getGroup(Game::groupEnemyCharacters));
 auto& colliders(manager.getGroup(Game::groupColliders));
-auto& projectiles(manager.getGroup(Game::groupProjectiles));
 auto& doors(manager.getGroup(Game::groupDoors));
 
 Game::Game() {}
@@ -102,26 +102,26 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 
 	//Cleric
 	Cleric.addComponent<TransformComponent>(301.0f, 2944.0f, 220, 110, 0.35);
-	Cleric.addComponent<StatusComponent>(30, 50, 15, 40, 0);
+	Cleric.addComponent<StatusComponent>(30, 50, 15, 40);
 	Cleric.addComponent<SpriteComponent>("Cleric", true);
 	Cleric.addComponent<ColliderComponent>("Cleric");
 	Cleric.addComponent<KeyboardController>();
+	Cleric.addComponent<FightNight>();
 	Cleric.getComponent<SpriteComponent>().battleIndex = 0;
 	Cleric.addGroup(Game::groupPlayerCharacters);
 
 	//Warrior
 	Warrior.addComponent<TransformComponent>(301.0f, 2998.0f, 184, 109, 0.35);
-	Warrior.addComponent<StatusComponent>(50, 15, 30, 40, 1);
+	Warrior.addComponent<StatusComponent>(50, 15, 30, 40);
 	Warrior.addComponent<SpriteComponent>("Warrior", true);
 	Warrior.addComponent<ColliderComponent>("Warrior");
 	Warrior.addComponent<KeyboardController>();
-	Warrior.addComponent<FightNight>();
 	Warrior.getComponent<SpriteComponent>().battleIndex = 1;
 	Warrior.addGroup(Game::groupPlayerCharacters);
 
 	//Wizard
 	Wizard.addComponent<TransformComponent>(256.0f, 2944.0f, 220, 110, 0.35);
-	Wizard.addComponent<StatusComponent>(30, 35, 45, 40, 2);
+	Wizard.addComponent<StatusComponent>(30, 35, 45, 40);
 	Wizard.addComponent<SpriteComponent>("Wizard", true);
 	Wizard.addComponent<ColliderComponent>("Wizard");
 	Wizard.addComponent<KeyboardController>();
@@ -130,7 +130,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 
 	//Ranger
 	Ranger.addComponent<TransformComponent>(256.0f, 2989.0f, 220, 110, 0.35);
-	Ranger.addComponent<StatusComponent>(30, 50, 20, 40, 3);
+	Ranger.addComponent<StatusComponent>(30, 50, 20, 40);
 	Ranger.addComponent<SpriteComponent>("Ranger", true);
 	Ranger.addComponent<ColliderComponent>("Ranger");
 	Ranger.addComponent<KeyboardController>();
@@ -139,13 +139,13 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 
 	//Spoopy
 	Spoopy.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	Spoopy.addComponent<StatusComponent>(450, 50, 30, 55, 4);
-	Spoopy.getComponent<StatusComponent>().setCoeffs(0.07, 0.02, 0.01, 0.01);
+	Spoopy.addComponent<StatusComponent>(450, 50, 30, 55);
+	Spoopy.getComponent<StatusComponent>().SetDecisionCoeffs(0.075, 0.03, 0.02, 0.025);
+	Spoopy.getComponent<StatusComponent>().SetTargetWeights(0.5, 0.5, 0.7, 0.3);
 	Spoopy.addComponent<SpriteComponent>("Spoopy", true);
 	Spoopy.getComponent<SpriteComponent>().battleIndex = 4;
 	Spoopy.addGroup(Game::groupEnemyCharacters);
 
-	assets->CreateProjectile(Flameball, Vector2D(600, 640), Vector2D(2, 0), 300, 1, "Flameball");
 	label.addComponent<UILabel>(10, 10, "Player Position", "Pixellari", white);
 }
 
@@ -235,15 +235,6 @@ void Game::update() {
 			}
 		}
 
-		for (auto& p : projectiles) {
-
-			if (Collision::AABB(Cleric.getComponent<ColliderComponent>().collider, p->getComponent<ColliderComponent>().collider)) {
-
-				std::cout << "hit Cleric" << std::endl;
-				p->destroy();
-			}
-		}
-
 		camera.x = Cleric.getComponent<TransformComponent>().position.x - 640;
 		camera.y = Cleric.getComponent<TransformComponent>().position.y - 360;
 
@@ -256,24 +247,24 @@ void Game::update() {
 		break;
 
 	case stateTurnBased:
-	{
 
 		manager.refresh();
 		manager.update();
 
-		if (!actorsDetermined) {
+		if (!fightInitialized) {
 
 			//Generate enemy encounter randomly
 			enemyCount = CombatFunctions::GenerateRandomEncounter(&manager, currentEnemies);
 			std::cout << "Enemy Count: " << enemyCount << std::endl;
-			actorsDetermined = true;
-		}
-
-		if (!actorsSorted) {
 
 			//sort enemies by AP descendingly and generate an array of pointers to their status components
-			CombatFunctions::SortEnemiesByAP(currentEnemies, enemyCount, enemyStatus);
-			actorsSorted = true;
+			CombatFunctions::InitializeEnemies(currentEnemies, enemyCount, enemyStatus, behaviour);
+
+			Cleric.getComponent<FightNight>().steps = 0;
+
+			CombatFunctions::SetPlayerStatus(&manager, playerStatus);
+
+			fightInitialized = true;
 		}
 
 		if (Game::event.type == SDL_KEYDOWN && !actionQueued) {
@@ -288,64 +279,121 @@ void Game::update() {
 			
 		}
 
-		for (auto& p : players) {
+		for (int i = 0; i < 4; i++) {
 
-			//Make each player attack once per turn
-			
-			if (p->getComponent<StatusComponent>().isAlive && currentTurn == p->getComponent<StatusComponent>().battleIndex) {
+			if (currentTurn == playerStatus[i].combatIndex) {
 
-				if (actionQueued) {
+				if (playerStatus[i].isAlive) { //Make each player attack once per turn
 
-					switch (actionType) {
+					if (actionQueued) {
+
+						switch (actionType) {
 
 						case SDLK_j:	//attack
-						
-						if (enemySelected) {
 
-						if (CombatFunctions::Attack(p, enemyStatus, enemySelector, enemyCount)) {
+							if (enemySelected) {
 
-							p->getComponent<SpriteComponent>().attack = true;
-							currentTurn++;
+								if (CombatFunctions::PlayerAttack(&playerStatus[i], enemyStatus, enemySelector, enemyCount, winCheck)) {
 
+									players[i]->getComponent<SpriteComponent>().attack = true;
+									currentTurn++;
+								}
+
+								actionQueued = enemySelected = false;
+							}
+
+							break;
+
+						case SDLK_k:	//defend
+
+							if (CombatFunctions::Defend(&playerStatus[i])) { currentTurn++; }
+
+							actionQueued = false;
+
+							break;
+
+						case SDLK_l:	//rest
+
+							if (CombatFunctions::Rest(&playerStatus[i])) { currentTurn++; }
+
+							actionQueued = false;
+
+							break;
 						}
-
-						actionQueued = enemySelected = false;
-
-						}
-
-						break;
-
-					case SDLK_k:	//defend
-
-						if (CombatFunctions::Defend(p)) { currentTurn++; }
-
-						actionQueued = false;
-
-						break;
-
-					case SDLK_l:	//rest
-
-						if (CombatFunctions::Rest(p)) { currentTurn++; }
-
-						actionQueued = false;
-
-						break;
 					}
-
-					
-					
 				}
 
+				else { currentTurn++; }
 			}
 		}
+
+		for (int i = 0; i < enemyCount; i++) {
+
+			if (currentTurn == enemyStatus[i].combatIndex) {
+
+				if (enemyStatus[i].isAlive) {
+
+					switch (behaviour[i].DecisionMaker()) {
+
+					case EnemyBehaviour::decision::ATK:
+
+						switch (behaviour[i].TargetChooser(playerStatus)) {
+
+						case EnemyBehaviour::target::strongest:
+
+							if (CombatFunctions::EnemyAttack(&enemyStatus[i], behaviour[i].GetStrongest(playerStatus), lossCheck)) { currentTurn++; }
+
+							break;
+
+						case EnemyBehaviour::target::tankiest:
+
+							if (CombatFunctions::EnemyAttack(&enemyStatus[i], behaviour[i].GetTankiest(playerStatus), lossCheck)) { currentTurn++; }
+
+							break;
+
+						case EnemyBehaviour::target::weakest:
+
+							if (CombatFunctions::EnemyAttack(&enemyStatus[i], behaviour[i].GetWeakest(playerStatus), lossCheck)) { currentTurn++; }
+
+							break;
+						}
+
+						break;
+
+					case EnemyBehaviour::decision::DEF:
+
+						if (CombatFunctions::Defend(&enemyStatus[i])) { currentTurn++; }
+
+						break;
+
+					case EnemyBehaviour::decision::REST:
+
+						if (CombatFunctions::Rest(&enemyStatus[i])) { currentTurn++; }
+
+						break;
+
+					}
+				}
+
+				else { currentTurn++; }
+			}
+		}
+
+		if (currentTurn == 4 + enemyCount) { currentTurn = 0; }
+
+		if (lossCheck && isBattleLost(playerStatus)) { _worldState = stateGameOver; std::cout << "World State: " << _worldState << std::endl; }
+		lossCheck = false;
+
+		if (winCheck && isBattleWon(enemyStatus, enemyCount)) { _worldState = stateRealTime; std::cout << "World State: " << _worldState << std::endl; }
+		winCheck = false;
 
 		break; //end of turn based game loop
 
 	case stateGameOver:
 
-		//game over method
+		isRunning = false;
 		break;
-	}
+
 	}
 }
 
@@ -362,11 +410,11 @@ void Game::render() {
 		
 	case stateRealTime:
 
+		std::cout << "Rendering Real Time!" << std::endl;
+
 		for (auto& t : tiles) { t->draw(); }
 		for (auto& c : colliders) { c->draw(); }
 		for (auto& p : players) { p->draw(); }
-		for (auto& p : projectiles) { p->draw(); }
-		for (auto& e : enemies) { e->draw(); }
 
 		label.draw();
 

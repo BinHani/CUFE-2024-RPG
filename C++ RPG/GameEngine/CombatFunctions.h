@@ -14,14 +14,16 @@ const uint8_t restRefund = 5;
 
 struct CombatFunctions {
 	static int GenerateRandomEncounter(Manager* man, Entity* enemies[]);
-	static void SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[], EnemyBehaviour _behaviour[]);
+	static void InitializeEnemies(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[], EnemyBehaviour _behaviour[]);
+	static void SetPlayerStatus(Manager* man, StatusComponent _playerStatus[]);
 	static SDL_Keycode GetAction(SDL_Event& _event);
 	static SDL_Keycode GetTarget(SDL_Event& _event);
-	static void Command();
-	static bool Attack(Entity* attacker, StatusComponent defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount);
-	static bool Defend(Entity* actor);
-	static bool Rest(Entity* actor);
-	static unsigned short isOver();
+	static bool PlayerAttack(StatusComponent* attacker, StatusComponent defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount, bool& _winCheck);
+	static bool EnemyAttack(StatusComponent* attacker, StatusComponent* defender, bool& _lossCheck);
+	static bool Defend(StatusComponent* actor);
+	static bool Rest(StatusComponent* actor);
+	static worldState isBattleWon(StatusComponent playerStatus[], StatusComponent enemyStatus[], int enemyCount);
+	static bool isBattleLost(StatusComponent playerStatus[]);
 };
 
 //Randomly generate encounter from pool of enemies
@@ -61,7 +63,7 @@ int CombatFunctions::GenerateRandomEncounter(Manager* man, Entity* enemies[]) {
 	return enemyCount;
 }
 
-void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[], EnemyBehaviour _behaviour[]) {
+void CombatFunctions::InitializeEnemies(Entity* enemies[], int _enemyCount, StatusComponent _enemyStatus[], EnemyBehaviour _behaviour[]) {
 
 	for (int i = 0; i < _enemyCount; i++) {
 		for (int j = 0; j < _enemyCount - (i + 1); j++) {
@@ -70,13 +72,23 @@ void CombatFunctions::SortEnemiesByAP(Entity* enemies[], int _enemyCount, Status
 				enemies[j] = enemies[j + 1];
 				enemies[j + 1] = enemies[j];
 			}
-
 		}
 	}
 
-	for (int i = 0; i < _enemyCount; i++) { _enemyStatus[i] = enemies[i]->getComponent<StatusComponent>(); }
+	for (int i = 0; i < _enemyCount; i++) { 
+		_enemyStatus[i] = enemies[i]->getComponent<StatusComponent>();
+		_enemyStatus[i].combatIndex = i + 4;
+	}
 
-	for (int i = 0; i < enemyCount; i++) { _behaviour[i].setStatus(&_enemyStatus[i]); }
+	for (int i = 0; i < _enemyCount; i++) { _behaviour[i].setStatus(&_enemyStatus[i]); }
+}
+
+void CombatFunctions::SetPlayerStatus(Manager* man, StatusComponent _playerStatus[]) {
+
+	for (int i = 0; i < 4; i++) {
+		_playerStatus[i] = man->getGroup((Game::groupPlayerCharacters))[i]->getComponent<StatusComponent>();
+		_playerStatus[i].combatIndex = i;
+	}
 }
 
 SDL_Keycode CombatFunctions::GetAction(SDL_Event& _event) {
@@ -98,27 +110,9 @@ SDL_Keycode CombatFunctions::GetTarget(SDL_Event& _event) {
 	else return SDLK_UNKNOWN;
 }
 
-void CombatFunctions::Command() {
+bool CombatFunctions::PlayerAttack(StatusComponent* attacker, StatusComponent defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount, bool& _winCheck) {
 
-	switch (Game::event.key.keysym.sym) {
-
-	case SDLK_j:
-		//Attack();
-		break;
-
-	case SDLK_k:
-		//Defend();
-		break;
-
-	case SDLK_l:
-		//Rest();
-		break;
-	}
-}
-
-bool CombatFunctions::Attack(Entity* attacker, StatusComponent defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount) {
-
-	if (attacker->getComponent<StatusComponent>().currentAP >= attackCost) {
+	if (attacker->currentAP >= attackCost) {
 
 		switch (_enemySelector) {
 	
@@ -126,18 +120,25 @@ bool CombatFunctions::Attack(Entity* attacker, StatusComponent defenderStatus[],
 
 			if (defenderStatus[0].isAlive) { 
 			
-			defenderStatus[0].currentHP -= attacker->getComponent<StatusComponent>().damage;
-			std::cout << "Enemy 1's HP: "<< defenderStatus[0].currentHP << std::endl;
+			defenderStatus[0].currentHP -= attacker->damage;
 
-			attacker->getComponent<StatusComponent>().currentAP -= attackCost;
-			std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
+			if (defenderStatus[0].currentHP <= 0) {
 
-			if (defenderStatus[0].currentHP < 0) { defenderStatus[0].currentHP = 0; }
-
-			return true;
+				defenderStatus[0].isAlive = false;
+				defenderStatus[0].currentHP = 0;
+				_winCheck = true;
 			}
 
-			std::cout << "Invalid Target!\n";
+			attacker->currentAP -= attackCost;
+
+			std::cout << "Enemy 1's HP: "<< defenderStatus[0].currentHP << std::endl;
+			std::cout << "Current AP: " << attacker->currentAP << std::endl << std::endl;
+
+			return true;
+
+			}
+
+			std::cout << "Invalid Target!" << std::endl << std::endl;
 			return false;
 
 		case SDLK_2:
@@ -146,20 +147,26 @@ bool CombatFunctions::Attack(Entity* attacker, StatusComponent defenderStatus[],
 
 				if (defenderStatus[1].isAlive) {
 
-					defenderStatus[1].currentHP -= attacker->getComponent<StatusComponent>().damage;
+					defenderStatus[1].currentHP -= attacker->damage;
+
+					if (defenderStatus[1].currentHP <= 0) {
+
+						defenderStatus[1].isAlive = false;
+						defenderStatus[1].currentHP = 0;
+						_winCheck = true;
+					}
+
+					attacker->currentAP -= attackCost;
+
 					std::cout << "Enemy 2's HP: " << defenderStatus[1].currentHP << std::endl;
-
-					attacker->getComponent<StatusComponent>().currentAP -= attackCost;
-					std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
-
-					if (defenderStatus[1].currentHP < 0) { defenderStatus[1].currentHP = 0; }
+					std::cout << "Current AP: " << attacker->currentAP << std::endl << std::endl;
 
 					return true;
 				}
 
 			}
 
-			std::cout << "Invalid Target!\n";
+			std::cout << "Invalid Target!" << std::endl << std::endl;
 			return false;
 
 		case SDLK_3:
@@ -168,20 +175,26 @@ bool CombatFunctions::Attack(Entity* attacker, StatusComponent defenderStatus[],
 
 				if (defenderStatus[2].isAlive) {
 
-					defenderStatus[2].currentHP -= attacker->getComponent<StatusComponent>().damage;
+					defenderStatus[2].currentHP -= attacker->damage;
+
+					if (defenderStatus[2].currentHP <= 0) {
+
+						defenderStatus[2].isAlive = false;
+						defenderStatus[2].currentHP = 0;
+						_winCheck = true;
+					}
+
+					attacker->currentAP -= attackCost;
+
 					std::cout << "Enemy 3's HP: " << defenderStatus[2].currentHP << std::endl;
-
-					attacker->getComponent<StatusComponent>().currentAP -= attackCost;
-					std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
-
-					if (defenderStatus[2].currentHP < 0) { defenderStatus[2].currentHP = 0; }
+					std::cout << "Current AP: " << attacker->currentAP << std::endl << std::endl;
 
 					return true;
 				}
 
 			}
 
-			std::cout << "Invalid Target!\n";
+			std::cout << "Invalid Target!" << std::endl << std::endl;
 			return false;
 
 		case SDLK_4:
@@ -190,35 +203,41 @@ bool CombatFunctions::Attack(Entity* attacker, StatusComponent defenderStatus[],
 
 				if (defenderStatus[3].isAlive) {
 
-					defenderStatus[3].currentHP -= attacker->getComponent<StatusComponent>().damage;
-					std::cout << "Enemy 4's HP: " << defenderStatus[2].currentHP << std::endl;
+					defenderStatus[3].currentHP -= attacker->damage;
 
-					attacker->getComponent<StatusComponent>().currentAP -= attackCost;
-					std::cout << "Current AP: " << attacker->getComponent<StatusComponent>().currentAP << std::endl;
+					if (defenderStatus[3].currentHP <= 0) {
 
-					if (defenderStatus[3].currentHP < 0) { defenderStatus[3].currentHP = 0; }
+						defenderStatus[3].isAlive = false;
+						defenderStatus[3].currentHP = 0;
+						_winCheck = true;
+					}
+
+					attacker->currentAP -= attackCost;
+
+					std::cout << "Enemy 4's HP: " << defenderStatus[2].currentHP << std::endl ;
+					std::cout << "Current AP: " << attacker->currentAP << std::endl << std::endl;
 
 					return true;
 				}
 
 			}
 
-			std::cout << "Invalid Target!\n";
+			std::cout << "Invalid Target!" << std::endl << std::endl;
 			return false;
 		}
 
-		std::cout << "Not Enough AP!\n";
+		std::cout << "Not Enough AP!" << std::endl << std::endl;
 		return false;
 
 	}
 
 }
 
-bool CombatFunctions::Defend(Entity* actor) {
+bool CombatFunctions::Defend(StatusComponent* actor) {
 
-	if (actor->getComponent<StatusComponent>().currentAP >= defendCost) {
+	if (actor->currentAP >= defendCost) {
 
-		actor->getComponent<StatusComponent>().isDefending = true;
+		actor->isDefending = true;
 
 		std::cout << "Actor is defending!\n";
 		return true;
@@ -230,23 +249,61 @@ bool CombatFunctions::Defend(Entity* actor) {
 
 }
 
-bool CombatFunctions::Rest(Entity* actor) {
+bool CombatFunctions::Rest(StatusComponent* actor) {
 
-	if (actor->getComponent<StatusComponent>().currentAP != actor->getComponent<StatusComponent>().maxAP) {
+	if (actor->currentAP != actor->maxAP) {
 
-		actor->getComponent<StatusComponent>().currentAP += restRefund;
+		actor->currentAP += restRefund;
 
-		std::cout << "AP partially restored!\n";
+		std::cout << "AP partially restored!" << std::endl << std::endl;
 		return true;
 
 	}
 
-	std::cout << "AP is already full!\n";
+	std::cout << "AP is already full!" << std::endl << std::endl;
 	return false;
 
 }
 
-unsigned short isOver() {
+bool CombatFunctions::EnemyAttack(StatusComponent* attacker, StatusComponent* defender, bool& _lossCheck) {
 
-	return 0;
+	if (attacker->currentAP < attackCost) {
+
+		defender->currentHP -= attacker->damage;
+		attacker->currentAP -= attackCost;
+
+		if (defender->currentHP <= 0) {
+
+			defender->isAlive = false;
+			defender->currentHP = 0;
+			_lossCheck = true;
+		}
+
+		std::cout << "Enemy Attacked!" << std::endl << std::endl;
+
+		return true;
+	}
+
+	std::cout << "Not Enough AP!" << std::endl << std::endl;
+
+	return false;
+
+}
+
+bool isBattleWon(StatusComponent enemyStatus[], int enemyCount) {
+
+	bool anyEnemyAlive = false;
+
+	for (int i = 0; i < enemyCount; i++) { if (enemyStatus[i].isAlive) { anyEnemyAlive = true; break; } }
+
+	return !anyEnemyAlive;
+}
+
+bool isBattleLost(StatusComponent playerStatus[]) {
+
+	bool anyPlayerAlive = false;
+
+	for (int i = 0; i < 4; i++) { if (playerStatus[i].isAlive) { anyPlayerAlive = true; break; } }
+
+	return !anyPlayerAlive;
 }
