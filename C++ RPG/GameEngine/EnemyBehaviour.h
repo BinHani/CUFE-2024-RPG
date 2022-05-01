@@ -1,39 +1,35 @@
 #pragma once
 #include "ECS\ECS.h"
 #include "ECS\Components.h"
+#include "Game.h"
 #include <random>
+
+extern Manager manager;
 
 class EnemyBehaviour {
 
 public:
 
-	StatusComponent* status;
-	float normalizedHP, normalizedAP;
+	EnemyBehaviour() {}
 
-	void init() {
+	EnemyBehaviour(StatusComponent* _status, double _attackCoeff, double _defendCoeff, double _restCoeff, double _irrationalCoeff) :
+		status(_status), attackCoeff(_attackCoeff), defendCoeff(_defendCoeff), restCoeff(_restCoeff), irrationalCoeff(_irrationalCoeff) {}
 
-		status = &entity->getComponent<StatusComponent>();
-
-		attackWeight = 0;
-		defendWeight = 0;
-		restWeight = 0;
-		irrationalWeight = 0;
-
-		normalizedHP = status->maxHP;
-		normalizedAP = status->maxAP;
+	void setStatus(StatusComponent* _status) { 
+		
+		status = _status;
+		attackCoeff = status->attackCoeff;
+		defendCoeff = status->defendCoeff;
+		restCoeff = status->restCoeff;
+		irrationalCoeff = status->irrationalCoeff;
 	}
-
-	void update() override {
-
-		normalizedHP = static_cast<float>(status->currentHP) / status->maxHP;
-		normalizedAP = static_cast<float>(status->currentAP) / status->maxAP;
-	}
-
-
 
 private:
+	StatusComponent* status;
 
-	float attackWeight, defendWeight, restWeight, irrationalWeight;
+	double normalizedHP, normalizedAP;
+	double attackWeight, defendWeight, restWeight, irrationalWeight;
+	double attackCoeff, defendCoeff, restCoeff, irrationalCoeff;
 
 	enum class decision { ATK, DEF, REST };
 
@@ -88,33 +84,6 @@ private:
 
 	}
 
-	decision AI(unsigned short a, unsigned short d, unsigned short r, unsigned short i) {
-
-		ResetWeights();
-
-		if (normalizedAP <= 0.15) { return decision::REST; }
-
-		if (normalizedHP >= 0.5) {
-
-			attackWeight += a * normalizedHP;
-			defendWeight += d * (1 - normalizedHP);
-			restWeight = r * (1 - normalizedAP);
-			irrationalWeight += i * normalizedHP;
-
-		}
-
-		if (normalizedHP < 0.5) {
-
-			attackWeight += a * normalizedHP;
-			defendWeight += d * (1 - normalizedHP);
-			restWeight = r * (1 - normalizedAP);
-			irrationalWeight += i * (1 - normalizedHP);
-		}
-
-		return getDecision();
-
-	}
-
 	decision getDecision() {
 
 		double interval[] = { 1, 2, 3, 4, 5 };
@@ -149,4 +118,36 @@ private:
 	}
 
 	void ResetWeights() { attackWeight = defendWeight = restWeight = irrationalWeight = 0; }
+
+	decision AI() {
+
+		ResetWeights();
+
+		normalizedHP = static_cast<double>(status->currentHP) / status->maxHP;
+		normalizedAP = static_cast<double>(status->currentAP) / status->maxAP;
+
+		if (normalizedAP <= 0.15) { return decision::REST; }
+
+		if (normalizedHP >= 0.5) {
+
+			attackWeight += attackCoeff * normalizedHP;
+			defendWeight += defendCoeff * (1 - normalizedHP);
+			restWeight = restCoeff * (1 - normalizedAP);
+			irrationalWeight += irrationalCoeff * normalizedHP;
+
+		}
+
+		if (normalizedHP < 0.5) {
+
+			attackWeight += attackCoeff * normalizedHP;
+			defendWeight += defendCoeff * (1 - normalizedHP);
+			restWeight = restCoeff * (1 - normalizedAP);
+			irrationalWeight += irrationalCoeff * (1 - normalizedHP);
+		}
+
+		return getDecision();
+
+	}
 };
+
+

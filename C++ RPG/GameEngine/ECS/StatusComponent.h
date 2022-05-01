@@ -10,6 +10,8 @@ struct StatusComponent : public Component {
 	short baseResistance, currentResistance;
 	short battleIndex;
 
+	double attackCoeff, defendCoeff, restCoeff, irrationalCoeff;
+
 	bool isAlive;
 	bool isDefending;
 
@@ -45,6 +47,14 @@ struct StatusComponent : public Component {
 		maxAP = _status.maxAP;
 		damage = _status.damage;
 		baseResistance = _status.baseResistance;
+	}
+
+	void setCoeffs(double _attackCoeff, double _defendCoeff, double _restCoeff, double _irrationalCoeff) {
+
+		attackCoeff = _attackCoeff;
+		defendCoeff = _defendCoeff;
+		restCoeff = _restCoeff;
+		irrationalCoeff = _irrationalCoeff;
 	}
 
 };

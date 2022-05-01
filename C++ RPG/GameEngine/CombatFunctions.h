@@ -20,7 +20,7 @@ struct CombatFunctions {
 	static bool Attack(Entity* attacker, StatusComponent defenderStatus[], SDL_Keycode& _enemySelector, int _enemyCount);
 	static bool Defend(Entity* actor);
 	static bool Rest(Entity* actor);
-	static unsigned short isOver()
+	static unsigned short isOver();
 };
 
 //Randomly generate encounter from pool of enemies
@@ -243,3 +243,7 @@ bool CombatFunctions::Rest(Entity* actor) {
 
 }
 
+unsigned short isOver() {
+
+	return 0;
+}

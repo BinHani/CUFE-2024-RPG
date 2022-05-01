@@ -7,6 +7,7 @@
 #include "AssetManager.h"
 #include "WorldState.h"
 #include "CombatFunctions.h"
+#include "EnemyBehaviour.h"
 #include <sstream>
 #include <vector>
 
@@ -22,7 +23,7 @@ SDL_Rect Game::camera = { 0,0,1280,720 };
 bool Game::isRunning = false;
 worldState _worldState = stateRealTime;
 
-//variables for wall-collision
+//variables for collision handling
 Vector2D clericPos;
 Vector2D wizardPos;
 Vector2D warriorPos;
@@ -33,6 +34,7 @@ const uint8_t* keystates = SDL_GetKeyboardState(NULL);
 Entity* currentEnemies[4];
 bool enemyExists[4];
 StatusComponent enemyStatus[4];
+EnemyBehaviour behaviour[];
 int enemyCount, currentTurn = 0;
 bool actorsDetermined = false; 
 bool actorsSorted = false;
@@ -138,6 +140,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	//Spoopy
 	Spoopy.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
 	Spoopy.addComponent<StatusComponent>(450, 50, 30, 55, 4);
+	Spoopy.getComponent<StatusComponent>().setCoeffs(0.07, 0.02, 0.01, 0.01);
 	Spoopy.addComponent<SpriteComponent>("Spoopy", true);
 	Spoopy.getComponent<SpriteComponent>().battleIndex = 4;
 	Spoopy.addGroup(Game::groupEnemyCharacters);
