@@ -19,9 +19,9 @@ private:
 	SDL_PixelFormat* fmt;
 	size_t length;
 	TRANS_TYPE type;
+	int completionCounter = 0;
 	int counter = 0;
 	int speed;
-	int completionCounter = 0;
 
 	void FromBlack()
 	{

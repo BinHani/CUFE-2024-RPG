@@ -14,6 +14,7 @@ public:
 	SpriteComponent* sprite;
 	//std::queue<int> inputDelayer;
 	const uint8_t* keystates;
+	bool isInitialized = false;
 
 	void init() override {
 		
@@ -24,7 +25,9 @@ public:
 
 	void update() override {
 
-		if (_worldState == stateRealTime) {
+		switch (_worldState) {
+
+		case stateRealTime:
 
 			if (Game::event.type == SDL_KEYDOWN) {
 
@@ -152,6 +155,14 @@ public:
 						sprite->Play("WalkLeft");
 						sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
 					}
+
+					break;
+
+				default:
+
+					sprite->Play("Idle");
+					transform->velocity.Zero();
+
 					break;
 				}
 			}
@@ -294,6 +305,8 @@ public:
 					break;
 				}
 			}
+
+			break;
 		}
 	}
 };

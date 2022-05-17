@@ -294,9 +294,6 @@
     <ClInclude Include="GameEngine\Map.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngine\ECS\Components.h">
-      <Filter>GameEngine\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngine\ECS\ECS.h">
       <Filter>GameEngine\ECS</Filter>
     </ClInclude>
@@ -373,6 +370,9 @@
       <Filter>GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\EnemyBehaviour.h">
+      <Filter>GameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\ECS\Components.h">
       <Filter>GameEngine</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,13 +10,9 @@
 class SpriteComponent : public Component {
 
 private:
-
 	TransformComponent* transform;
-	//StatusComponent* status; //causes error
 	SDL_Texture* texture;
-	SDL_Rect srcRect, destRect;
-
-	bool animated = false;
+	SDL_Rect srcRect;
 	int frames = 0;
 	int speed = 50;
 	bool firstHalf;
@@ -24,6 +20,9 @@ private:
 
 public:
 
+	std::string id;
+	bool animated = false;
+	SDL_Rect destRect;
 	int animIndex = 0;
 	int battleIndex;  //controls where to be placed in battles
 	bool attack;
@@ -34,9 +33,9 @@ public:
 
 	SpriteComponent() = default;
 
-	SpriteComponent(std::string id) {setTex(id); }
+	SpriteComponent(std::string _id) :id(_id) { setTex(id); }
 
-	SpriteComponent(std::string id, bool isAnimated) { 
+	SpriteComponent(std::string _id, bool isAnimated) :id(_id) {
 		
 		animated = isAnimated;
 
@@ -68,7 +67,6 @@ public:
 	void init() override {
 
 		transform = &entity->getComponent<TransformComponent>();
-		//status = &entity->getComponent<StatusComponent>();
 
 		srcRect.x = srcRect.y = 0;
 		srcRect.w = transform->width;
@@ -179,7 +177,7 @@ public:
 				destRect.w = transform->width * 0.75;
 				destRect.h = transform->height * 0.75;
 
-				if (destRect.x < 40 || destRect.x > 840) { destRect.x = 40; }
+				//if (destRect.x < Game::camera.x + 40 || destRect.x > Game::camera.x + 840) { destRect.x = Game::camera.x + 40; }
 
 				//Trace the Ellipse: (x-440) ^ 2 / 400 ^ 2 + (y - 20) ^ 2 / 80 ^ 2 = 1
 
@@ -226,19 +224,18 @@ public:
 
 	inline void Ellipse() {
 
-		if (destRect.x >= 40 && destRect.x < 840 && firstHalf) {
+		if (destRect.x >= 40 && destRect.x <= 870 && firstHalf) {
 
-			destRect.x += 4;
-			destRect.y = round(20 + 0.2 * sqrt((840 - destRect.x) * (destRect.x - 40)));
-			if (destRect.x == 840) { firstHalf = false; }
-
+			if (destRect.x > 866) { firstHalf = false; destRect.x = 870; }
+			else destRect.x += 4;
+			destRect.y = round(20 + 0.2 * sqrt((870 - destRect.x) * (destRect.x - 40)));
 		}
 
-		if (destRect.x > 40 && destRect.x <= 840 && !firstHalf) {
+		else if (destRect.x >= 40 &&  destRect.x <= 870 && !firstHalf) {
 
-			destRect.x -= 4;
-			destRect.y = round(20 - 0.2 * sqrt((840 - destRect.x) * (destRect.x - 40)));
-			if (destRect.x == 40) { firstHalf = true; }
+			if (destRect.x < 44) { firstHalf = true; destRect.x = 40; }
+			else destRect.x -= 4;
+			destRect.y = round(20 - 0.2 * sqrt((870 - destRect.x) * (destRect.x - 40)));
 		}
 
 	}

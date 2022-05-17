@@ -32,39 +32,39 @@ public:
 		randomWeight = _status->randomWeight;
 	}
 
-	StatusComponent* GetStrongest(StatusComponent _playerStatus[]) {
+	StatusComponent* GetStrongest() {
 
-		StatusComponent strongest = _playerStatus[0];
+		StatusComponent strongest = manager.getGroup(Game::groupPlayerCharacters)[0]->getComponent<StatusComponent>();
 
-		for (size_t i = 1; i < 4; i++) {
+		for (auto& p : manager.getGroup(Game::groupPlayerCharacters)) {
 
-			if (_playerStatus[i].damage >= strongest.damage) { strongest = _playerStatus[i]; }
+			if (p->getComponent<StatusComponent>().damage >= strongest.damage) { strongest = p->getComponent<StatusComponent>(); }
 		}
 
 		return &strongest;
 
 	}
 
-	StatusComponent* GetTankiest(StatusComponent _playerStatus[]) {
+	StatusComponent* GetTankiest() {
 
-		StatusComponent tankiest = _playerStatus[0];
+		StatusComponent tankiest = manager.getGroup(Game::groupPlayerCharacters)[0]->getComponent<StatusComponent>();
 
-		for (size_t i = 1; i < 4; i++) {
+		for (auto& p : manager.getGroup(Game::groupPlayerCharacters)) {
 
-			if (_playerStatus[i].currentHP >= tankiest.currentHP) { tankiest = _playerStatus[i]; }
+			if (p->getComponent<StatusComponent>().currentHP >= tankiest.currentHP) { tankiest = p->getComponent<StatusComponent>(); }
 		}
 
 		return &tankiest;
 
 	}
 
-	StatusComponent* GetWeakest(StatusComponent _playerStatus[]) {
+	StatusComponent* GetWeakest() {
 
-		StatusComponent weakest = _playerStatus[0];
+		StatusComponent weakest = manager.getGroup(Game::groupPlayerCharacters)[0]->getComponent<StatusComponent>();
 
-		for (size_t i = 1; i < 4; i++) {
+		for (auto& p : manager.getGroup(Game::groupPlayerCharacters)) {
 
-			if (_playerStatus[i].currentHP <= weakest.currentHP) { weakest = _playerStatus[i]; }
+			if (p->getComponent<StatusComponent>().currentHP <= weakest.currentHP) { weakest = p->getComponent<StatusComponent>(); }
 		}
 
 		return &weakest;
@@ -104,11 +104,11 @@ public:
 		return _decision;
 	}
 
-	target TargetChooser(StatusComponent _playerStatus[]) {
+	target TargetChooser() {
 
-		StatusComponent* weakest = GetWeakest(_playerStatus);
-		StatusComponent* strongest = GetStrongest(_playerStatus);
-		StatusComponent* tankiest = GetTankiest(_playerStatus);
+		StatusComponent* weakest = GetWeakest();
+		StatusComponent* strongest = GetStrongest();
+		StatusComponent* tankiest = GetTankiest();
 
 		ResetTargetWeights();
 

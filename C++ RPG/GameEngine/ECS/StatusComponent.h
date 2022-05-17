@@ -46,14 +46,18 @@ struct StatusComponent : public Component {
 		maxAP = _status.maxAP;
 		damage = _status.damage;
 		baseResistance = _status.baseResistance;
+
 		attackCoeff = _status.attackCoeff;
 		defendCoeff = _status.defendCoeff;
 		restCoeff = _status.restCoeff;
 		irrationalCoeff = _status.irrationalCoeff;
+
 		strongestWeight = _status.strongestWeight;
 		tankiestWeight = _status.tankiestWeight;
 		weakestWeight = _status.weakestWeight;
 		randomWeight = _status.randomWeight;
+
+		combatIndex = _status.combatIndex;
 	}
 
 	void SetDecisionCoeffs(double _attackCoeff, double _defendCoeff, double _restCoeff, double _irrationalCoeff) {

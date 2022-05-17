@@ -12,7 +12,7 @@ int main(int argc, const char* argv[]) {
 
 	game = new Game();
 
-	game->init("The Adventures of the Peepee Poopoo man!", 1280, 720, false);
+	game->init("Another Generic RPG", 1280, 720, false);
 
 	while (game->running()) {
 

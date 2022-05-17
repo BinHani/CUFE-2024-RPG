@@ -36,7 +36,8 @@ public:
 		groupEnemyCharacters,
 		groupColliders,
 		groupProjectiles,
-		groupDoors
+		groupDoors,
+		groupCurrentEnemies
 	};
 
 private:

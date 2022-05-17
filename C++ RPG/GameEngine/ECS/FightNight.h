@@ -3,6 +3,8 @@
 #include "Components.h"
 #include <iostream>
 
+extern bool stateInitialized;
+
 class FightNight : public Component {
 
 public:
@@ -19,10 +21,17 @@ public:
 
 	void update() override {
 
-		if (oldPosition.x != currentPosition->x || oldPosition.y != currentPosition->y) { steps++; }
-		oldPosition.x = currentPosition->x;
-		oldPosition.y = currentPosition->y;
-		//std::cout << steps << std::endl;
-		if (steps >= 100) { _worldState = stateTurnBased; }
+		switch (_worldState) {
+
+		case stateRealTime:
+
+			if (oldPosition.x != currentPosition->x || oldPosition.y != currentPosition->y) { steps++; }
+			oldPosition.x = currentPosition->x;
+			oldPosition.y = currentPosition->y;
+			//std::cout << steps << std::endl;
+			if (steps >= 500) { stateInitialized = false;  _worldState = stateTurnBased; }
+
+			break;
+		}
 	}
 };

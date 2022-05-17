@@ -30,7 +30,7 @@ public:
 		if (!entity->hasComponent<TransformComponent>()) { entity->addComponent<TransformComponent>(); }
 		transform = &entity->getComponent<TransformComponent>();
 
-		tex = TextureManager::LoadTexture("assets/Map_tile_123.png");
+		//tex = TextureManager::LoadTexture("assets/Map_tile_123.png");
 		srcR = { 0,0,32,32 };
 		destR = { collider.x,collider.y,collider.w,collider.h };
 	}
@@ -50,6 +50,6 @@ public:
 
 	}
 
-	void draw() override { TextureManager::Draw(tex, srcR, destR, SDL_FLIP_NONE); }
+	//void draw() override { TextureManager::Draw(tex, srcR, destR, SDL_FLIP_NONE); }
 
 };
