@@ -75,13 +75,12 @@ int CombatFunctions::GenerateRandomEncounter() {
 
 		for (int j = 1; j < enemyTypeCount + 1; j++) {
 
-			if (r >= j && r <= j + 1) { 
-				createEnemy(manager.getGroup(Game::groupEnemyCharacters)[j - 1]);
-				std::cout << "enemy generated!" << std::endl;
-				std::cout << "Current Enemies: " << manager.getGroup(Game::groupCurrentEnemies).size() << std::endl;
-			}
+			if (r >= j && r <= j + 1) { createEnemy(manager.getGroup(Game::groupEnemyCharacters)[j - 1]); }
 		}
+
+		std::cout << "Battle Index: " << manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<SpriteComponent>().battleIndex << std::endl;
 	}
+	std::cout << std::endl;
 
 	return enemyCount;
 }
@@ -102,13 +101,41 @@ void CombatFunctions::InitializeEnemies(int _enemyCount, EnemyBehaviour _behavio
 	}
 */
 
+	int spoopyCounter = 0;
+	bool isSpoopy[4] = {0, 0, 0, 0};
+	int a = 0;
+
+	for (int i = 0; i < _enemyCount; i++) {
+		if (manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<SpriteComponent>().battleIndex == 4) {
+			spoopyCounter++;
+			isSpoopy[i] = true;
+		}
+	}
+
+
+
 	for (int i = 0; i < _enemyCount; i++) {
 		manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<StatusComponent>().combatIndex = i + 4;
-		manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<SpriteComponent>().destRect.x = 41 + 276 * i;
 		_behaviour[i].setStatus(&manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<StatusComponent>());
-		std::cout << "Combat Index: " << manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<StatusComponent>().combatIndex << std::endl;
 	}
-	
+
+		for (int i = 0; i < _enemyCount; i++) {
+			
+			for (int j = 0; j < i; j++) {
+				if (isSpoopy[j]) a++;
+			}
+
+			if (!isSpoopy[i]) {
+
+				manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<SpriteComponent>().destRect.x = (640 / (_enemyCount - spoopyCounter)) * (2 * (i - a) + 1)
+					- manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<TransformComponent>().width * manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<TransformComponent>().scale / 2;
+			}
+
+			else manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<SpriteComponent>().destRect.x = (415 / spoopyCounter) * (2 * a + 1)
+				- manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<TransformComponent>().width * manager.getGroup(Game::groupCurrentEnemies)[i]->getComponent<TransformComponent>().scale / 2;
+
+			a = 0;
+		}
 }
 
 void CombatFunctions::ResetPlayerStatus() {
@@ -268,6 +295,31 @@ bool CombatFunctions::PlayerAttack(StatusComponent* attacker, SDL_Keycode& _enem
 
 }
 
+bool CombatFunctions::EnemyAttack(StatusComponent* attacker, StatusComponent* defender, bool& _lossCheck) {
+
+	if (attacker->currentAP > attackCost) {
+
+		defender->currentHP -= attacker->damage;
+		attacker->currentAP -= attackCost;
+
+		if (defender->currentHP <= 0) {
+
+			defender->isAlive = false;
+			defender->currentHP = 0;
+			_lossCheck = true;
+		}
+
+		std::cout << "Enemy Attacked!" << std::endl << std::endl;
+
+		return true;
+	}
+
+	std::cout << "Attack attempt failed!" << std::endl << std::endl;
+
+	return false;
+
+}
+
 bool CombatFunctions::Defend(StatusComponent* actor) {
 
 	if (actor->currentAP >= defendCost) {
@@ -303,31 +355,6 @@ bool CombatFunctions::Rest(StatusComponent* actor) {
 	}
 
 	std::cout << "AP is already full!" << std::endl << std::endl;
-	return false;
-
-}
-
-bool CombatFunctions::EnemyAttack(StatusComponent* attacker, StatusComponent* defender, bool& _lossCheck) {
-
-	if (attacker->currentAP > attackCost) {
-
-		defender->currentHP -= attacker->damage;
-		attacker->currentAP -= attackCost;
-
-		if (defender->currentHP <= 0) {
-
-			defender->isAlive = false;
-			defender->currentHP = 0;
-			_lossCheck = true;
-		}
-
-		std::cout << "Enemy Attacked!" << std::endl << std::endl;
-
-		return true;
-	}
-
-	std::cout << "Attack attempt failed!" << std::endl << std::endl;
-
 	return false;
 
 }

@@ -13,8 +13,8 @@ struct StatusComponent : public Component {
 	double attackCoeff, defendCoeff, restCoeff, irrationalCoeff;
 	double strongestWeight, tankiestWeight, weakestWeight, randomWeight;
 
-	bool isAlive;
-	bool isDefending;
+	bool isAlive = true;
+	bool isDefending = false;
 
 	StatusComponent() {}
 
@@ -26,8 +26,6 @@ struct StatusComponent : public Component {
 		currentHP = maxHP;
 		currentAP = maxAP;
 		currentResistance = baseResistance;
-		isAlive = true;
-		isDefending = false;
 	}
 
 	void update() override {

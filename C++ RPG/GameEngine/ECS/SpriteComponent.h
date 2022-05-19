@@ -15,7 +15,7 @@ private:
 	SDL_Rect srcRect;
 	int frames = 0;
 	int speed = 50;
-	bool firstHalf;
+	bool firstHalf = true;
 	int combatAnimator = 0;
 
 public:
@@ -25,7 +25,7 @@ public:
 	SDL_Rect destRect;
 	int animIndex = 0;
 	int battleIndex;  //controls where to be placed in battles
-	bool attack;
+	bool attack = false;
 
 	std::map<const char*, Animation> animations;
 
@@ -71,9 +71,6 @@ public:
 		srcRect.x = srcRect.y = 0;
 		srcRect.w = transform->width;
 		srcRect.h = transform->height;
-
-		attack = false;
-		firstHalf = true;
 	}
 
 	void update() override {
@@ -95,8 +92,6 @@ public:
 			break;
 
 		case stateTurnBased:
-
-			Play("WalkUp");
 
 			switch (battleIndex) {
 
@@ -174,19 +169,83 @@ public:
 				srcRect.x = srcRect.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
 				srcRect.y = animIndex * transform->height;
 
-				destRect.w = transform->width * 0.75;
-				destRect.h = transform->height * 0.75;
-
-				//if (destRect.x < Game::camera.x + 40 || destRect.x > Game::camera.x + 840) { destRect.x = Game::camera.x + 40; }
+				destRect.w = transform->width * 0.5;
+				destRect.h = transform->height * 0.5;
 
 				//Trace the Ellipse: (x-440) ^ 2 / 400 ^ 2 + (y - 20) ^ 2 / 80 ^ 2 = 1
-
+				
 				//if (status->currentHP > status->maxHP / 2) {
 				Ellipse();
 			//	}
 
 			//	else if (status->currentHP <= status->maxHP / 2) { LemniscateOfGerono(); }
 
+				break;
+
+			case 5: //Tree
+				srcRect.x = srcRect.y = 0;
+				srcRect.w = transform->width;
+				srcRect.h = transform->height;
+
+				destRect.w = transform->width * transform->scale;
+				destRect.h = transform->height * transform->scale;
+
+				destRect.y = 100;
+				break;
+
+			case 6: //Golem
+				srcRect.x = srcRect.y = 0;
+				srcRect.w = transform->width;
+				srcRect.h = transform->height;
+
+				destRect.w = transform->width * transform->scale;
+				destRect.h = transform->height * transform->scale;
+
+				destRect.y = 180;
+				break;
+
+			case 7: //Sword Sentinel
+				srcRect.x = srcRect.y = 0;
+				srcRect.w = transform->width;
+				srcRect.h = transform->height;
+
+				destRect.w = transform->width * transform->scale;
+				destRect.h = transform->height * transform->scale;
+
+				destRect.y = 200;
+				break;
+
+			case 8: //Shield Sentinel
+				srcRect.x = srcRect.y = 0;
+				srcRect.w = transform->width;
+				srcRect.h = transform->height;
+
+				destRect.w = transform->width * transform->scale;
+				destRect.h = transform->height * transform->scale;
+
+				destRect.y = 200;
+				break;
+
+			case 9: //Imp
+				srcRect.x = srcRect.y = 0;
+				srcRect.w = transform->width;
+				srcRect.h = transform->height;
+
+				destRect.w = transform->width * transform->scale;
+				destRect.h = transform->height * transform->scale;
+
+				destRect.y = 220;
+				break;
+
+			case 10: //Imp Fighter
+				srcRect.x = srcRect.y = 0;
+				srcRect.w = transform->width;
+				srcRect.h = transform->height;
+
+				destRect.w = transform->width * transform->scale;
+				destRect.h = transform->height * transform->scale;
+
+				destRect.y = 220;
 				break;
 			}
 
@@ -205,19 +264,18 @@ public:
 
 	inline void LemniscateOfGerono() {
 
-		if (destRect.x >= 40 && destRect.x < 840 && firstHalf) {
+		if (destRect.x >= 40 && destRect.x < 870 && firstHalf) {
 
-			destRect.x += 4;
+			if (destRect.x > 866) { firstHalf = false; destRect.x = 870; }
+			else destRect.x += 4;
 			destRect.y = round(20 + 0.00125 * (destRect.x - 440) * sqrt((840 - destRect.x) * (destRect.x - 40)));
-			if (destRect.x == 840) { firstHalf = false; }
-
 		}
 
-		if (destRect.x > 40 && destRect.x <= 840 && !firstHalf) {
+		else if (destRect.x >= 40 && destRect.x <= 870 && !firstHalf) {
 
-			destRect.x -= 4;
+			if (destRect.x < 44) { firstHalf = true; destRect.x = 40; }
+			else destRect.x -= 4;
 			destRect.y = round(20 - 0.00125 * (destRect.x - 440) * sqrt((840 - destRect.x) * (destRect.x - 40)));
-			if (destRect.x == 40) { firstHalf = true; }
 		}
 
 	}

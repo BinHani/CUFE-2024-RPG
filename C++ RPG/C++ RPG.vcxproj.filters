@@ -483,6 +483,24 @@
     <Image Include="assets\wipe.png">
       <Filter>assets</Filter>
     </Image>
+    <Image Include="assets\golem_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\shield_automaton_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\sword_automaton_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\tree_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\birb_fighter_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="assets\birb_spritesheet.png">
+      <Filter>assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\Pixellari.ttf">

@@ -93,8 +93,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	assets->AddTexture("Warrior", "assets/warrior_spritesheet.png");
 	assets->AddTexture("Ranger", "assets/ranger_spritesheet.png");
 	assets->AddTexture("Spoopy", "assets/spoopy_spritesheet.png");
-	assets->AddTexture("Tree", "assets/tree_spritesheet.jpeg");
-	assets->AddTexture("Golem", "assets/golem_spritesheet.jpeg");
+	assets->AddTexture("Tree", "assets/tree_spritesheet.png");
+	assets->AddTexture("Golem", "assets/golem_spritesheet.png");
 	assets->AddTexture("Sword Sentinel", "assets/sword_automaton_spritesheet.png");
 	assets->AddTexture("Shield Sentinel", "assets/shield_automaton_spritesheet.png");
 	assets->AddTexture("Imp", "assets/birb_spritesheet.png");
@@ -152,7 +152,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 
 	//Spoopy
 	Spoopy.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	Spoopy.addComponent<StatusComponent>(450, 50, 30, 55);
+	Spoopy.addComponent<StatusComponent>(150, 50, 30, 55);
 	Spoopy.getComponent<StatusComponent>().SetDecisionCoeffs(0.075, 0.03, 0.02, 0.025);
 	Spoopy.getComponent<StatusComponent>().SetTargetWeights(0.5, 0.5, 0.7, 0.3);
 	Spoopy.addComponent<SpriteComponent>("Spoopy", true);
@@ -160,17 +160,17 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	Spoopy.addGroup(Game::groupEnemyCharacters);
 
 	//Tree
-	Tree.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	Tree.addComponent<StatusComponent>(450, 50, 30, 55);
+	Tree.addComponent<TransformComponent>(1100.0f, 1200.0f, 1061, 890, 0.375);
+	Tree.addComponent<StatusComponent>(120, 50, 30, 55);
 	Tree.getComponent<StatusComponent>().SetDecisionCoeffs(0.05, 0.06, 0.03, 0.05);
 	Tree.getComponent<StatusComponent>().SetTargetWeights(0.7, 0.3, 0.7, 0.4);
 	Tree.addComponent<SpriteComponent>("Tree", false);
 	Tree.getComponent<SpriteComponent>().battleIndex = 5;
 	Tree.addGroup(Game::groupEnemyCharacters);
-
+	
 	//Golem
-	Golem.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	Golem.addComponent<StatusComponent>(450, 50, 30, 55);
+	Golem.addComponent<TransformComponent>(1100.0f, 1200.0f, 306, 350, 0.9);
+	Golem.addComponent<StatusComponent>(70, 50, 10, 90);
 	Golem.getComponent<StatusComponent>().SetDecisionCoeffs(0.06, 0.04, 0.03, 0.01);
 	Golem.getComponent<StatusComponent>().SetTargetWeights(0.6, 0.7, 0.4, 0.1);
 	Golem.addComponent<SpriteComponent>("Golem", false);
@@ -178,8 +178,8 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	Golem.addGroup(Game::groupEnemyCharacters);
 
 	//Sword Sentinel
-	SwordSentinel.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	SwordSentinel.addComponent<StatusComponent>(450, 50, 30, 55);
+	SwordSentinel.addComponent<TransformComponent>(1100.0f, 1200.0f, 128, 128, 2);
+	SwordSentinel.addComponent<StatusComponent>(95, 30, 30, 55);
 	SwordSentinel.getComponent<StatusComponent>().SetDecisionCoeffs(0.09, 0.02, 0.03, 0.01);
 	SwordSentinel.getComponent<StatusComponent>().SetTargetWeights(0.8, 0.7, 0.4, 0.1);
 	SwordSentinel.addComponent<SpriteComponent>("Sword Sentinel", false);
@@ -187,17 +187,17 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	SwordSentinel.addGroup(Game::groupEnemyCharacters);
 
 	//Shield Sentinel
-	ShieldSentinel.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	ShieldSentinel.addComponent<StatusComponent>(450, 50, 30, 55);
+	ShieldSentinel.addComponent<TransformComponent>(1100.0f, 1200.0f, 128, 128, 2);
+	ShieldSentinel.addComponent<StatusComponent>(95, 30, 55, 30);
 	ShieldSentinel.getComponent<StatusComponent>().SetDecisionCoeffs(0.06, 0.06, 0.03, 0.01);
 	ShieldSentinel.getComponent<StatusComponent>().SetTargetWeights(0.6, 0.4, 0.7, 0.1);
-	ShieldSentinel.addComponent<SpriteComponent>("Shield Sentinel", false;
+	ShieldSentinel.addComponent<SpriteComponent>("Shield Sentinel", false);
 	ShieldSentinel.getComponent<SpriteComponent>().battleIndex = 8;
 	ShieldSentinel.addGroup(Game::groupEnemyCharacters);
 
 	//Imp
-	Imp.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	Imp.addComponent<StatusComponent>(450, 50, 30, 55);
+	Imp.addComponent<TransformComponent>(1100.0f, 1200.0f, 96, 96, 2.5);
+	Imp.addComponent<StatusComponent>(75, 20, 10, 15);
 	Imp.getComponent<StatusComponent>().SetDecisionCoeffs(0.03, 0.08, 0.04, 0.05);
 	Imp.getComponent<StatusComponent>().SetTargetWeights(0.3, 0.7, 0.8, 0.5);
 	Imp.addComponent<SpriteComponent>("Imp", false);
@@ -205,15 +205,13 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	Imp.addGroup(Game::groupEnemyCharacters);
 
 	//Imp Fighter
-	ImpFighter.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
-	ImpFighter.addComponent<StatusComponent>(450, 50, 30, 55);
+	ImpFighter.addComponent<TransformComponent>(1100.0f, 1200.0f, 96, 96, 2.5);
+	ImpFighter.addComponent<StatusComponent>(75, 20, 30, 55);
 	ImpFighter.getComponent<StatusComponent>().SetDecisionCoeffs(0.065, 0.075, 0.03, 0.055);
 	ImpFighter.getComponent<StatusComponent>().SetTargetWeights(0.6, 0.7, 0.5, 0.4);
 	ImpFighter.addComponent<SpriteComponent>("Imp Fighter", false);
 	ImpFighter.getComponent<SpriteComponent>().battleIndex = 10;
 	ImpFighter.addGroup(Game::groupEnemyCharacters);
-
-
 
 	label.addComponent<UILabel>(10, 10, "Player Position", "Pixellari", white);
 }
@@ -503,7 +501,6 @@ void Game::render() {
 			for (auto& t : tiles) { t->draw(); }
 			for (auto& c : colliders) { c->draw(); }
 			for (auto& p : players) { p->draw(); }
-
 			label.draw();
 
 		break;
