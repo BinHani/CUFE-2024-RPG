@@ -32,6 +32,7 @@ public:
 		randomWeight = _status->randomWeight;
 	}
 
+	// Utility functions to get the strongest (most attack power), tankiest (most HP), and weakest (least HP) characters to aid in the AI decision making
 	StatusComponent* GetStrongest() {
 
 		StatusComponent strongest = manager.getGroup(Game::groupPlayerCharacters)[0]->getComponent<StatusComponent>();
@@ -69,7 +70,11 @@ public:
 
 		return &weakest;
 	}
-	
+
+	/* The "AI" used for the decision making process for the enemy combatants. The basic idea here is that we have weights for atack, defend, rest, and irrational behavior. 
+	These weights are influenced by several factors, e.g., the enemy's inclination (each enemy type has coefficients which indicate whether this enemy prefers to attack more 
+	or defend more and so on) and the enemy's current stats. The decision maker calculates the values of all the weights, and then at the end does a comparison, 
+	wherein the weight with the largest value specifies the decision. */
 	decision DecisionMaker() {
 
 		SetNormalizedStats();
@@ -84,7 +89,8 @@ public:
 			irrationalWeight = irrationalCoeff * normalizedHP;
 
 		}
-
+		/* The attack weights change based on whether the enemy is near death (below 50% HP) or not. The idea was to have more changes, however right now all this does is lead to 
+		more irrational behavior, faking a sense of 'panic'. */
 		if (normalizedHP < 0.5) {
 
 			attackWeight = attackCoeff * normalizedHP;
@@ -93,6 +99,7 @@ public:
 			irrationalWeight = irrationalCoeff * (1 - normalizedHP);
 		}
 
+		// Current weights, for debugging purposes 
 		std::cout << "===========AI INFO===========" << std::endl;
 		std::cout << "AttackWeight: " << attackWeight << std::endl;
 		std::cout << "DefendWeight: " << defendWeight << std::endl;
@@ -104,6 +111,10 @@ public:
 		return _decision;
 	}
 
+	/* The "AI" used for the targeting process for the enemy combatants on an attack. The idea here is that we have weights for each possible target (random, strongest, tankiest, etc.). 
+	These weights are influenced by 2 factors; the enemy's inclination (each enemy type has coefficients which indicate how much this enemy prefers to attack the strongest character and so on)
+	and the player characters' current stats. The target chooser calculates the values of all the weights, and then at the end does a comparison, wherein the weight with the largest value 
+	specifies the target. */
 	target TargetChooser() {
 
 		StatusComponent* weakest = GetWeakest();
@@ -143,6 +154,8 @@ private:
 	double strongestWeight, tankiestWeight, weakestWeight, randomWeight;
 	double attackCoeff, defendCoeff, restCoeff, irrationalCoeff;
 
+	/* The utility functions that are responsible for the comparison step in the decision making and targeting AI. The way both work is by analyzing the corresponding weights and then
+	returning the decision based on the distribution of the weights. */
 	decision GetDecision() {
 
 		double interval[] = { 1, 2, 3, 4, 5 };

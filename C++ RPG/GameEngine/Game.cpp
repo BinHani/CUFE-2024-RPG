@@ -48,6 +48,12 @@ auto& Warrior(manager.addEntity());
 auto& Wizard(manager.addEntity());
 auto& Ranger(manager.addEntity());
 auto& Spoopy(manager.addEntity());
+auto& Tree(manager.addEntity());
+auto& Golem(manager.addEntity());
+auto& SwordSentinel(manager.addEntity());
+auto& ShieldSentinel(manager.addEntity());
+auto& Imp(manager.addEntity());
+auto& ImpFighter(manager.addEntity());
 auto& label(manager.addEntity());
 
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -87,6 +93,12 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	assets->AddTexture("Warrior", "assets/warrior_spritesheet.png");
 	assets->AddTexture("Ranger", "assets/ranger_spritesheet.png");
 	assets->AddTexture("Spoopy", "assets/spoopy_spritesheet.png");
+	assets->AddTexture("Tree", "assets/tree_spritesheet.jpeg");
+	assets->AddTexture("Golem", "assets/golem_spritesheet.jpeg");
+	assets->AddTexture("Sword Sentinel", "assets/sword_automaton_spritesheet.png");
+	assets->AddTexture("Shield Sentinel", "assets/shield_automaton_spritesheet.png");
+	assets->AddTexture("Imp", "assets/birb_spritesheet.png");
+	assets->AddTexture("Imp Fighter", "assets/birb_fighter_spritesheet.png");
 	assets->AddTexture("Flameball", "assets/flameball.png");
 	assets->AddTexture("Background", "assets/underground_battle.png");
 	assets->AddFont("Pixellari", "assets/Pixellari.ttf", 16);
@@ -146,6 +158,62 @@ void Game::init(const char* title, int width, int height, bool fullscreen) {
 	Spoopy.addComponent<SpriteComponent>("Spoopy", true);
 	Spoopy.getComponent<SpriteComponent>().battleIndex = 4;
 	Spoopy.addGroup(Game::groupEnemyCharacters);
+
+	//Tree
+	Tree.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
+	Tree.addComponent<StatusComponent>(450, 50, 30, 55);
+	Tree.getComponent<StatusComponent>().SetDecisionCoeffs(0.05, 0.06, 0.03, 0.05);
+	Tree.getComponent<StatusComponent>().SetTargetWeights(0.7, 0.3, 0.7, 0.4);
+	Tree.addComponent<SpriteComponent>("Tree", false);
+	Tree.getComponent<SpriteComponent>().battleIndex = 5;
+	Tree.addGroup(Game::groupEnemyCharacters);
+
+	//Golem
+	Golem.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
+	Golem.addComponent<StatusComponent>(450, 50, 30, 55);
+	Golem.getComponent<StatusComponent>().SetDecisionCoeffs(0.06, 0.04, 0.03, 0.01);
+	Golem.getComponent<StatusComponent>().SetTargetWeights(0.6, 0.7, 0.4, 0.1);
+	Golem.addComponent<SpriteComponent>("Golem", false);
+	Golem.getComponent<SpriteComponent>().battleIndex = 6;
+	Golem.addGroup(Game::groupEnemyCharacters);
+
+	//Sword Sentinel
+	SwordSentinel.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
+	SwordSentinel.addComponent<StatusComponent>(450, 50, 30, 55);
+	SwordSentinel.getComponent<StatusComponent>().SetDecisionCoeffs(0.09, 0.02, 0.03, 0.01);
+	SwordSentinel.getComponent<StatusComponent>().SetTargetWeights(0.8, 0.7, 0.4, 0.1);
+	SwordSentinel.addComponent<SpriteComponent>("Sword Sentinel", false);
+	SwordSentinel.getComponent<SpriteComponent>().battleIndex = 7;
+	SwordSentinel.addGroup(Game::groupEnemyCharacters);
+
+	//Shield Sentinel
+	ShieldSentinel.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
+	ShieldSentinel.addComponent<StatusComponent>(450, 50, 30, 55);
+	ShieldSentinel.getComponent<StatusComponent>().SetDecisionCoeffs(0.06, 0.06, 0.03, 0.01);
+	ShieldSentinel.getComponent<StatusComponent>().SetTargetWeights(0.6, 0.4, 0.7, 0.1);
+	ShieldSentinel.addComponent<SpriteComponent>("Shield Sentinel", false;
+	ShieldSentinel.getComponent<SpriteComponent>().battleIndex = 8;
+	ShieldSentinel.addGroup(Game::groupEnemyCharacters);
+
+	//Imp
+	Imp.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
+	Imp.addComponent<StatusComponent>(450, 50, 30, 55);
+	Imp.getComponent<StatusComponent>().SetDecisionCoeffs(0.03, 0.08, 0.04, 0.05);
+	Imp.getComponent<StatusComponent>().SetTargetWeights(0.3, 0.7, 0.8, 0.5);
+	Imp.addComponent<SpriteComponent>("Imp", false);
+	Imp.getComponent<SpriteComponent>().battleIndex = 9;
+	Imp.addGroup(Game::groupEnemyCharacters);
+
+	//Imp Fighter
+	ImpFighter.addComponent<TransformComponent>(1100.0f, 1200.0f, 582, 370, 1);
+	ImpFighter.addComponent<StatusComponent>(450, 50, 30, 55);
+	ImpFighter.getComponent<StatusComponent>().SetDecisionCoeffs(0.065, 0.075, 0.03, 0.055);
+	ImpFighter.getComponent<StatusComponent>().SetTargetWeights(0.6, 0.7, 0.5, 0.4);
+	ImpFighter.addComponent<SpriteComponent>("Imp Fighter", false);
+	ImpFighter.getComponent<SpriteComponent>().battleIndex = 10;
+	ImpFighter.addGroup(Game::groupEnemyCharacters);
+
+
 
 	label.addComponent<UILabel>(10, 10, "Player Position", "Pixellari", white);
 }
@@ -291,6 +359,7 @@ void Game::update() {
 			
 		}
 
+		// This is the player combat loop. It loops over the player-controlled characters and does an action (attack, defend, or rest) based on player input
 		for (auto& p : players) {
 
 			if (currentTurn == p->getComponent<StatusComponent>().combatIndex) {
@@ -338,7 +407,8 @@ void Game::update() {
 				else { currentTurn++; }
 			}
 		}
-
+		/* This is the enemy combat loop. It loops over the enemy combatants, queries the decision making AI for each enemy type
+		and does an action (attack, defend, or rest) based on the result of that */
 		for (int i = 0; i < enemyCount; i++) {
 
 			if (currentTurn == currentEnemies[i]->getComponent<StatusComponent>().combatIndex) {
